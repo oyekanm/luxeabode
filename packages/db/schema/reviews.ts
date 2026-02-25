@@ -1,0 +1,47 @@
+import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
+import { createId } from "@paralleldrive/cuid2";
+import { users } from "./users";
+import { bookings } from "./bookings";
+import { rooms } from "./rooms";
+import { apartments } from "./apartments";
+
+export const reviews = sqliteTable("reviews", {
+  id: text("id")
+    .primaryKey()
+    .$defaultFn(() => createId()),
+  bookingId: text("booking_id")
+    .notNull()
+    .references(() => bookings.id),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
+  // review targets one or the other
+  roomId: text("room_id").references(() => rooms.id),
+  apartmentId: text("apartment_id").references(() => apartments.id),
+  // ratings 1-5 across multiple dimensions
+  overallRating: integer("overall_rating").notNull(), // 1-5
+  cleanlinessRating: integer("cleanliness_rating"),
+  accuracyRating: integer("accuracy_rating"),
+  locationRating: integer("location_rating"),
+  valueRating: integer("value_rating"),
+  communicationRating: integer("communication_rating"),
+  title: text("title"),
+  body: text("body").notNull(),
+  // admin moderation
+  status: text("status", {
+    enum: ["pending", "approved", "rejected", "flagged"],
+  })
+    .notNull()
+    .default("pending"),
+  adminResponse: text("admin_response"),
+  adminResponseAt: integer("admin_response_at", { mode: "timestamp" }),
+  isVerified: integer("is_verified", { mode: "boolean" })
+    .notNull()
+    .default(false),
+  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
+    () => new Date(),
+  ),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(
+    () => new Date(),
+  ),
+});

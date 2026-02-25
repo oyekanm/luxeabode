@@ -36,3 +36,20 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+#added by me
+.vscode
+.tanstack
+.wrangler 
+.DS_Store
+dist
+dist-ssr
+*.local
+.env
+.nitro
+.tanstack
+.wrangler 
+.output
+.vinxi
+__unconfig*
+todos.json
