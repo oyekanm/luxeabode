@@ -2,7 +2,7 @@ import type { KVNamespace } from "@cloudflare/workers-types";
 
 // packages/db/cache.ts
 export async function getCachedData<T>(
-  kv: KVNamespace,
+  kv: KVNamespace<string>,
   key: string,
   fetcher: () => Promise<T>,
   ttl = 3600, // 1 hour default
@@ -15,7 +15,7 @@ export async function getCachedData<T>(
 }
 
 export async function addCachedData<T>(
-  kv: KVNamespace,
+  kv: KVNamespace<string>,
   key: string,
   data: T,
   ttl = 3600,

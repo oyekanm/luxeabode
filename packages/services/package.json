@@ -2,7 +2,9 @@
   "name": "@repo/services",
   "version": "1.0.0",
   "description": "",
-  "main": "index.ts",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -11,5 +13,8 @@
   "license": "ISC",
   "dependencies": {
     "@repo/db": "workspace:*"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20260302.0"
   }
 }

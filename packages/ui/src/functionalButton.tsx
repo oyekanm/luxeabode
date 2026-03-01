@@ -1,6 +1,5 @@
-import React, { HtmlHTMLAttributes, HTMLProps } from "react";
+import React, { HTMLProps } from "react";
 import { cn } from "./cn";
-import { ClassNameValue } from "tailwind-merge";
 import { Button } from "./componentsui/button";
 
 type Props = {

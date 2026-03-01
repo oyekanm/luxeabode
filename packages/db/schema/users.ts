@@ -7,8 +7,8 @@ export const users = sqliteTable("users", {
     .$defaultFn(() => createId()),
   email: text("email").notNull().unique(),
   name: text("name").notNull(),
-  avatarUrl: text("avatar_url"),
   phone: text("phone"),
+  hashedPassword: text("hashed_password").notNull(),
   // oauth
   oauthProvider: text("oauth_provider", { enum: ["google", "github"] }),
   oauthId: text("oauth_id"),
@@ -20,6 +20,10 @@ export const users = sqliteTable("users", {
   permissions: text("permissions", { mode: "json" })
     .$type<AdminPermission[]>()
     .default([]),
+
+  isEmailVerified: integer("is_email_verified", { mode: "boolean" })
+    .notNull()
+    .default(false),
   isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
     () => new Date(),
@@ -69,3 +73,5 @@ export const oauthAccounts = sqliteTable("oauth_accounts", {
     () => new Date(),
   ),
 });
+
+export type User = typeof users.$inferSelect;

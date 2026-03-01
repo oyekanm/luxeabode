@@ -14,8 +14,7 @@ export const apartments = sqliteTable("apartments", {
   country: text("country").notNull().default("NG"),
   latitude: real("latitude"),
   longitude: real("longitude"),
-  // cover image stored in R2, this is the R2 object key
-  coverImageKey: text("cover_image_key").notNull(),
+
   // rules stored as JSON array of strings
   rules: text("rules", { mode: "json" }).$type<string[]>().default([]),
 
@@ -43,6 +42,7 @@ export const apartmentImages = sqliteTable("apartment_images", {
   apartmentId: text("apartment_id")
     .notNull()
     .references(() => apartments.id, { onDelete: "cascade" }),
+  url: text("url").notNull(),
   r2Key: text("r2_key").notNull(), // R2 object key
   altText: text("alt_text"),
   sortOrder: integer("sort_order").notNull().default(0),

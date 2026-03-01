@@ -1,18 +1,12 @@
-import { createFileRoute, Link } from '@tanstack/react-router'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import {
-  Search,
-  Plus,
-  Edit2,
-  Trash2,
-  MapPin,
-  Building2,
-  Eye,
-} from 'lucide-react'
-import { Suspense } from 'react' // added Suspense import
+import InputText from '@repo/ui/inputText'
 import BuildingCard from '@/features/buildings/components/buildingCard'
 import FunctionalButton from '@repo/ui/functionalButton'
+import { createFileRoute, Link } from '@tanstack/react-router'
+import {
+  Plus,
+  Search
+} from 'lucide-react'
+import CardContainer from '@repo/ui/cardContainer'
 
 const BUILDINGS = [
   {
@@ -42,11 +36,11 @@ function BuildingsManagementPage() {
     <div className="min-h-screen">
       <div className="xtrw">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <div className="space-y-3">
-            <h1 className="text-4xl text-neutral-900 font-bold strong">
+          <div className="">
+            <h1 className="page-title">
               Buildings Management
             </h1>
-            <p className="text-neutral-500 text-lg">
+            <p className="text-neutral-500 text-base">
               Manage your building locations and their properties.
             </p>
           </div>
@@ -57,14 +51,14 @@ function BuildingsManagementPage() {
             </Link>
           </FunctionalButton>
         </div>
-        <Card className="p-4 mb-8 border-border/50 bg-card">
+        <CardContainer className="p-4 mb-8 border-border/50 bg-card">
           <div className="flex flex-col md:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-              <Input placeholder="Search buildings..." className="pl-10 h-10" />
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 icon-size text-muted-foreground" />
+              <InputText field={{}} placeholder="Search buildings..." className="pl-12 h-16" />
             </div>
           </div>
-        </Card>
+        </CardContainer>
         <div className="grid gap-6">
           {BUILDINGS.map((building) => (
             <BuildingCard key={building.id} building={building} />

@@ -6,6 +6,7 @@ interface CardContainerProps {
   children: React.ReactNode;
   actionButton?: React.ReactNode;
   className?: string;
+  description?: string;
 }
 
 export default function CardContainer({
@@ -13,6 +14,7 @@ export default function CardContainer({
   children,
   actionButton,
   className,
+  description,
 }: CardContainerProps) {
   return (
     <div
@@ -22,11 +24,14 @@ export default function CardContainer({
       )}
     >
       <div className="flex items-center justify-between gap-3 flex-wrap ">
-        {title && (
-          <h1 className="text-xs lg:text-sm  xl:text-[1.6rem] font-medium 2xl:font-semibold text-text-primary">
-            {title}
-          </h1>
-        )}
+        <div>
+          {title && (
+            <h1 className="text-lg lg:text-xl  xl:text-2xl font-medium 2xl:font-semibold text-neutral-900 ">
+              {title}
+            </h1>
+          )}
+          {description && <p className="text-sm xl:text-base font-medium text-neutral-500 ">{description}</p>}
+        </div>
         {actionButton}
       </div>
 

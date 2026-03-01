@@ -1,7 +1,7 @@
 export const buildingFormFields = [
   {
     name: 'name',
-    label: 'Name',
+    label: 'Building Name',
     type: 'text',
     placeholder: 'Enter building name',
   },
@@ -36,27 +36,15 @@ export const buildingFormFields = [
     placeholder: 'Enter building country',
   },
   {
-    name: 'coverImageKey',
-    label: 'Cover Image',
-    type: 'text',
-    placeholder: 'Enter cover image key',
-  },
-  {
-    name: 'amenities',
-    label: 'Amenities',
-    type: 'text',
-    placeholder: 'Enter amenities',
-  },
-  {
     name: 'checkInTime',
-    label: 'Check-in Time',
-    type: 'text',
+    label: 'Check-in Time (click the clock icon)',
+    type: 'time',
     placeholder: 'Enter check-in time',
   },
   {
     name: 'checkOutTime',
-    label: 'Check-out Time',
-    type: 'text',
+    label: 'Check-out Time (click the clock icon)',
+    type: 'time',
     placeholder: 'Enter check-out time',
   },
   {
@@ -64,11 +52,5 @@ export const buildingFormFields = [
     label: 'Minimum Stay Nights',
     type: 'number',
     placeholder: 'Enter minimum stay nights',
-  },
-  {
-    name: 'rules',
-    label: 'Rules',
-    type: 'text',
-    placeholder: 'Enter rules',
   },
 ]

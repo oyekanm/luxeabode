@@ -13,13 +13,14 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as BuildingsIndexRouteImport } from './routes/buildings/index'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
-import { Route as DemoDrizzleRouteImport } from './routes/demo/drizzle'
 import { Route as DemoBetterAuthRouteImport } from './routes/demo/better-auth'
 import { Route as BuildingsNewRouteImport } from './routes/buildings/new'
 import { Route as BuildingsBuildingIdRouteImport } from './routes/buildings/$buildingId'
-import { Route as ApiBuildingsIndexRouteImport } from './routes/api/buildings/index'
+import { Route as ApiUploadRouteImport } from './routes/api/upload'
+import { Route as ApiBuildingsRouteImport } from './routes/api/buildings'
 import { Route as DemoFormSimpleRouteImport } from './routes/demo/form.simple'
 import { Route as DemoFormAddressRouteImport } from './routes/demo/form.address'
+import { Route as BuildingsEditBuildingIdRouteImport } from './routes/buildings/edit.$buildingId'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const IndexRoute = IndexRouteImport.update({
@@ -42,11 +43,6 @@ const DemoTableRoute = DemoTableRouteImport.update({
   path: '/demo/table',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoDrizzleRoute = DemoDrizzleRouteImport.update({
-  id: '/demo/drizzle',
-  path: '/demo/drizzle',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const DemoBetterAuthRoute = DemoBetterAuthRouteImport.update({
   id: '/demo/better-auth',
   path: '/demo/better-auth',
@@ -62,9 +58,14 @@ const BuildingsBuildingIdRoute = BuildingsBuildingIdRouteImport.update({
   path: '/buildings/$buildingId',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiBuildingsIndexRoute = ApiBuildingsIndexRouteImport.update({
-  id: '/api/buildings/',
-  path: '/api/buildings/',
+const ApiUploadRoute = ApiUploadRouteImport.update({
+  id: '/api/upload',
+  path: '/api/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBuildingsRoute = ApiBuildingsRouteImport.update({
+  id: '/api/buildings',
+  path: '/api/buildings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoFormSimpleRoute = DemoFormSimpleRouteImport.update({
@@ -77,6 +78,11 @@ const DemoFormAddressRoute = DemoFormAddressRouteImport.update({
   path: '/demo/form/address',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BuildingsEditBuildingIdRoute = BuildingsEditBuildingIdRouteImport.update({
+  id: '/buildings/edit/$buildingId',
+  path: '/buildings/edit/$buildingId',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   id: '/api/auth/$',
   path: '/api/auth/$',
@@ -85,105 +91,112 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/buildings': typeof ApiBuildingsRoute
+  '/api/upload': typeof ApiUploadRoute
   '/buildings/$buildingId': typeof BuildingsBuildingIdRoute
   '/buildings/new': typeof BuildingsNewRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
-  '/demo/drizzle': typeof DemoDrizzleRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/buildings/': typeof BuildingsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/buildings/edit/$buildingId': typeof BuildingsEditBuildingIdRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
-  '/api/buildings/': typeof ApiBuildingsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/buildings': typeof ApiBuildingsRoute
+  '/api/upload': typeof ApiUploadRoute
   '/buildings/$buildingId': typeof BuildingsBuildingIdRoute
   '/buildings/new': typeof BuildingsNewRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
-  '/demo/drizzle': typeof DemoDrizzleRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/buildings': typeof BuildingsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/buildings/edit/$buildingId': typeof BuildingsEditBuildingIdRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
-  '/api/buildings': typeof ApiBuildingsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/buildings': typeof ApiBuildingsRoute
+  '/api/upload': typeof ApiUploadRoute
   '/buildings/$buildingId': typeof BuildingsBuildingIdRoute
   '/buildings/new': typeof BuildingsNewRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
-  '/demo/drizzle': typeof DemoDrizzleRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
   '/buildings/': typeof BuildingsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
+  '/buildings/edit/$buildingId': typeof BuildingsEditBuildingIdRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
-  '/api/buildings/': typeof ApiBuildingsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/api/buildings'
+    | '/api/upload'
     | '/buildings/$buildingId'
     | '/buildings/new'
     | '/demo/better-auth'
-    | '/demo/drizzle'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/buildings/'
     | '/api/auth/$'
+    | '/buildings/edit/$buildingId'
     | '/demo/form/address'
     | '/demo/form/simple'
-    | '/api/buildings/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/api/buildings'
+    | '/api/upload'
     | '/buildings/$buildingId'
     | '/buildings/new'
     | '/demo/better-auth'
-    | '/demo/drizzle'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/buildings'
     | '/api/auth/$'
+    | '/buildings/edit/$buildingId'
     | '/demo/form/address'
     | '/demo/form/simple'
-    | '/api/buildings'
   id:
     | '__root__'
     | '/'
+    | '/api/buildings'
+    | '/api/upload'
     | '/buildings/$buildingId'
     | '/buildings/new'
     | '/demo/better-auth'
-    | '/demo/drizzle'
     | '/demo/table'
     | '/demo/tanstack-query'
     | '/buildings/'
     | '/api/auth/$'
+    | '/buildings/edit/$buildingId'
     | '/demo/form/address'
     | '/demo/form/simple'
-    | '/api/buildings/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiBuildingsRoute: typeof ApiBuildingsRoute
+  ApiUploadRoute: typeof ApiUploadRoute
   BuildingsBuildingIdRoute: typeof BuildingsBuildingIdRoute
   BuildingsNewRoute: typeof BuildingsNewRoute
   DemoBetterAuthRoute: typeof DemoBetterAuthRoute
-  DemoDrizzleRoute: typeof DemoDrizzleRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
   BuildingsIndexRoute: typeof BuildingsIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
+  BuildingsEditBuildingIdRoute: typeof BuildingsEditBuildingIdRoute
   DemoFormAddressRoute: typeof DemoFormAddressRoute
   DemoFormSimpleRoute: typeof DemoFormSimpleRoute
-  ApiBuildingsIndexRoute: typeof ApiBuildingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -216,13 +229,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoTableRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/drizzle': {
-      id: '/demo/drizzle'
-      path: '/demo/drizzle'
-      fullPath: '/demo/drizzle'
-      preLoaderRoute: typeof DemoDrizzleRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/demo/better-auth': {
       id: '/demo/better-auth'
       path: '/demo/better-auth'
@@ -244,11 +250,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BuildingsBuildingIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/buildings/': {
-      id: '/api/buildings/'
+    '/api/upload': {
+      id: '/api/upload'
+      path: '/api/upload'
+      fullPath: '/api/upload'
+      preLoaderRoute: typeof ApiUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/buildings': {
+      id: '/api/buildings'
       path: '/api/buildings'
-      fullPath: '/api/buildings/'
-      preLoaderRoute: typeof ApiBuildingsIndexRouteImport
+      fullPath: '/api/buildings'
+      preLoaderRoute: typeof ApiBuildingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/form/simple': {
@@ -265,6 +278,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoFormAddressRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/buildings/edit/$buildingId': {
+      id: '/buildings/edit/$buildingId'
+      path: '/buildings/edit/$buildingId'
+      fullPath: '/buildings/edit/$buildingId'
+      preLoaderRoute: typeof BuildingsEditBuildingIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/auth/$': {
       id: '/api/auth/$'
       path: '/api/auth/$'
@@ -277,17 +297,18 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiBuildingsRoute: ApiBuildingsRoute,
+  ApiUploadRoute: ApiUploadRoute,
   BuildingsBuildingIdRoute: BuildingsBuildingIdRoute,
   BuildingsNewRoute: BuildingsNewRoute,
   DemoBetterAuthRoute: DemoBetterAuthRoute,
-  DemoDrizzleRoute: DemoDrizzleRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
   BuildingsIndexRoute: BuildingsIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
+  BuildingsEditBuildingIdRoute: BuildingsEditBuildingIdRoute,
   DemoFormAddressRoute: DemoFormAddressRoute,
   DemoFormSimpleRoute: DemoFormSimpleRoute,
-  ApiBuildingsIndexRoute: ApiBuildingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

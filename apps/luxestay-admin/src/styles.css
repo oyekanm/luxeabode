@@ -13,6 +13,11 @@
   font-family: "Cabinet Grotesk", sans-serif;
 }
 
+.page-title {
+  @apply text-4xl text-neutral-900 font-bold;
+  font-family: "Cabinet Grotesk", sans-serif;
+}
+
 
 body {
   @apply m-0;

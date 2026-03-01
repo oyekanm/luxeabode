@@ -7,4 +7,5 @@ export default defineConfig({
   schema: "./schema.ts",
   dialect: "sqlite",
   driver: "d1-http",
+  verbose: true,
 });

@@ -1,5 +1,5 @@
 import React from "react";
-import { Textarea } from "@/componentsui/textarea";
+import { Textarea } from "./componentsui/textarea";
 
 type InputTextProps = {
   type?: string;
@@ -21,7 +21,7 @@ export default function InputTextArea({
       {...field}
       readOnly={readOnly}
       // name="email"
-      className="block resize-none border-[.1rem] border-[#D4D4D4] radius-sm py-[1.6rem] px-[1.4rem] !text-[1.6rem] !leading-[2.4rem] placeholder:!text-[#565656] !text-[#171717"
+      className="block h-40 resize-none border-[.1rem] border-[#D4D4D4] radius-sm py-[1.6rem] px-[1.4rem] text-base font-medium placeholder:text-neutral-400  text-neutral-500 "
     />
   );
 }

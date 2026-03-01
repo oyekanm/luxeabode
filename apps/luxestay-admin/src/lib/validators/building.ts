@@ -13,6 +13,14 @@ export const CreateApartmentSchema = z.object({
   checkOutTime: z.string().min(1, 'Check-out time is required'),
   minStayNights: z.number().optional(),
   rules: z.array(z.string()).optional(),
+  images: z
+    .array(
+      z.object({
+        url: z.string().min(1, 'Image URL is required'),
+        r2Key: z.string().min(1, 'R2 Key is required'),
+      }),
+    )
+    .min(1, 'Add atleast one Image'),
 })
 
 export type CreateApartmentInput = z.infer<typeof CreateApartmentSchema>

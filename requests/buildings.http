@@ -1,0 +1,27 @@
+# perform api call for creating an apartment
+POST http://localhost:4000/api/buildings
+Content-Type: application/json
+
+{
+    "name": "Apartment 1",
+    "address": "123 Main St",
+    "city": "New York",
+    "state": "NY",
+    "country": "USA",
+    "coverImageKey": "cover-image-key",
+    "amenities": [
+        "wifi",
+        "pool"
+    ],
+    "checkInTime": "14:00",
+    "checkOutTime": "12:00",
+    "minStayNights": 1,
+    "rules": [
+        "no smoking"
+    ]
+}
+
+# get buildings
+
+# GET  http://localhost:4000/api/buildings
+# Content-Type: application/json
