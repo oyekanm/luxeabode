@@ -6,4 +6,4 @@ export {
   FormMessage,
   useFormField,
 } from "./componentsui/form";
-export { useForm } from "react-hook-form";
+export * from "react-hook-form";

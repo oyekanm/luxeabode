@@ -19,7 +19,7 @@ export const apartments = sqliteTable("apartments", {
   rules: text("rules", { mode: "json" }).$type<string[]>().default([]),
 
   // general amenities at apartment level (wifi, parking, pool etc)
-  amenities: text("amenities", { mode: "json" }).$type<string[]>().default([]),
+  // amenities: text("amenities", { mode: "json" }).$type<string[]>().default([]),
   checkInTime: text("check_in_time").notNull().default("14:00"),
   checkOutTime: text("check_out_time").notNull().default("11:00"),
   minStayNights: integer("min_stay_nights").default(1),
@@ -43,7 +43,7 @@ export const apartmentImages = sqliteTable("apartment_images", {
     .notNull()
     .references(() => apartments.id, { onDelete: "cascade" }),
   url: text("url").notNull(),
-  r2Key: text("r2_key").notNull(), // R2 object key
+  key: text("key").notNull(), // R2 object key
   altText: text("alt_text"),
   sortOrder: integer("sort_order").notNull().default(0),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(

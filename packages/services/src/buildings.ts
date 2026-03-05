@@ -1,9 +1,11 @@
-import { Db, eq, and, sql } from "@repo/db";
+import { Db, eq, and, sql, R2Bucket } from "@repo/db";
 // import type {
 //   CreateApartmentInput,
 //   UpdateApartmentInput,
 // } from "@repo/validators/apartment";
 import { apartments, rooms, apartmentImages } from "@repo/db";
+import { NotFoundError } from "./errors";
+import { createStorageService } from "./storage";
 
 // add cache to the service and rate limiting
 
@@ -33,5 +35,24 @@ export class BuildingsService {
         rooms: { with: { images: true, pricingRules: true } },
       },
     });
+  }
+  static async deleteImage(
+    db: Db,
+    imageId: string,
+    r2: R2Bucket,
+    r2BaseUrl: string,
+  ) {
+    const image = await db.query.apartmentImages.findFirst({
+      where: eq(apartmentImages.id, imageId),
+    });
+
+    if (!image) throw new NotFoundError("Image");
+
+    const storage = createStorageService(r2, r2BaseUrl);
+
+    // delete from R2 first, then from DB
+    // if R2 delete fails the DB record stays intact (safer than the reverse)
+    await storage.delete(image.r2Key);
+    await db.delete(apartmentImages).where(eq(apartmentImages.id, imageId));
   }
 }

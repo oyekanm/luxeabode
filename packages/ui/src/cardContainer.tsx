@@ -19,14 +19,14 @@ export default function CardContainer({
   return (
     <div
       className={cn(
-        "bg-white border border-[#E5E5E5] rounded-4xl py-4 px-3 w-full",
+        "bg-white border border-[#E5E5E5] rounded-4xl p-8 w-full",
         className,
       )}
     >
       <div className="flex items-center justify-between gap-3 flex-wrap ">
-        <div>
+        <div className="space-y-1">
           {title && (
-            <h1 className="text-lg lg:text-xl  xl:text-2xl font-medium 2xl:font-semibold text-neutral-900 ">
+            <h1 className="text-lg lg:text-xl  font-semibold text-neutral-900 ">
               {title}
             </h1>
           )}

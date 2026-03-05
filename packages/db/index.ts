@@ -9,6 +9,6 @@ export * from "./schema";
 // export all relations
 export * from "./relations";
 // export all cache
-export * from "./cache";
+// export * from "./cache";
 // export all client
 export * from "./client";

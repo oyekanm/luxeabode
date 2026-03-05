@@ -1,14 +1,17 @@
 {
-  "name": "luxestay",
+  "name": "luxeabode",
   "private": true,
   "scripts": {
     "build": "turbo run build",
-    "dev:admin":"turbo run dev --filter=luxestay-admin",
-    "dev:web":"turbo run dev --filter=luxestay-web",
+    "dev:admin": "turbo run dev --filter=luxeabode-admin",
+    "dev:web": "turbo run dev --filter=luxeabode-web",
     "dev": "turbo run dev --persist-to=./wrangler-data ",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "check-types": "turbo run check-types",
+    "db:generate": "turbo run generate --filter=@repo/db",
+    "db:migrate": "turbo run db:migrate --filter=luxeabode-admin",
+    "db:migrate:remote": "turbo run db:migrate:remote --filter=luxeabode-admin"
   },
   "devDependencies": {
     "prettier": "^3.7.4",
