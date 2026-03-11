@@ -1,22 +1,19 @@
-import { Db, eq, and, sql, R2Bucket } from "@repo/db";
-// import type {
-//   CreateApartmentInput,
-//   UpdateApartmentInput,
-// } from "@repo/validators/apartment";
-import { apartments, rooms, apartmentImages } from "@repo/db";
+import { and, apartmentImages, apartments, type Db, eq, desc } from "@repo/db";
 import { NotFoundError } from "./errors";
 import { createStorageService } from "./storage";
+import type { R2BucketLike } from "./types";
 
-// add cache to the service and rate limiting
+//TODO: add cache to the service and rate limiting
+
+interface GetBuildingsFilters {
+  city?: string;
+  isPublished?: boolean;
+  cursor?: string;
+  limit?: number;
+}
 
 export class BuildingsService {
-  static async getBuildings(db: Db) {
-    return await db.select().from(apartments);
-  }
-  static async getAll(
-    db: Db,
-    filters?: { city?: string; isPublished?: boolean },
-  ) {
+  static async getAll(db: Db, filters?: GetBuildingsFilters) {
     return db.query.apartments.findMany({
       where: and(
         filters?.isPublished !== undefined
@@ -25,6 +22,7 @@ export class BuildingsService {
         filters?.city ? eq(apartments.city, filters.city) : undefined,
       ),
       with: { images: true, rooms: true },
+      orderBy: desc(apartments.createdAt),
     });
   }
   static async getBySlug(db: Db, slug: string) {
@@ -38,21 +36,21 @@ export class BuildingsService {
   }
   static async deleteImage(
     db: Db,
-    imageId: string,
-    r2: R2Bucket,
+    imagekey: string,
+    r2: R2BucketLike,
     r2BaseUrl: string,
   ) {
     const image = await db.query.apartmentImages.findFirst({
-      where: eq(apartmentImages.id, imageId),
+      where: eq(apartmentImages.key, imagekey),
     });
 
-    if (!image) throw new NotFoundError("Image");
+    if (!image) throw new NotFoundError(`Image ${imagekey}`);
 
     const storage = createStorageService(r2, r2BaseUrl);
 
     // delete from R2 first, then from DB
     // if R2 delete fails the DB record stays intact (safer than the reverse)
-    await storage.delete(image.r2Key);
-    await db.delete(apartmentImages).where(eq(apartmentImages.id, imageId));
+    await storage.delete(image.key);
+    await db.delete(apartmentImages).where(eq(apartmentImages.key, imagekey));
   }
 }

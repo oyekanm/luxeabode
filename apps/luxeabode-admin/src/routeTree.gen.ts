@@ -10,19 +10,24 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as RoomsIndexRouteImport } from './routes/rooms/index'
 import { Route as BuildingsIndexRouteImport } from './routes/buildings/index'
+import { Route as RoomsNewRouteImport } from './routes/rooms/new'
+import { Route as RoomsRoomSlugRouteImport } from './routes/rooms/$roomSlug'
 import { Route as DemoTanstackQueryRouteImport } from './routes/demo/tanstack-query'
 import { Route as DemoTableRouteImport } from './routes/demo/table'
 import { Route as DemoBetterAuthRouteImport } from './routes/demo/better-auth'
 import { Route as BuildingsNewRouteImport } from './routes/buildings/new'
-import { Route as BuildingsBuildingIdRouteImport } from './routes/buildings/$buildingId'
+import { Route as BuildingsBuildingslugRouteImport } from './routes/buildings/$buildingslug'
 import { Route as ApiUploadRouteImport } from './routes/api/upload'
+import { Route as ApiRoomsRouteImport } from './routes/api/rooms'
 import { Route as ApiRevalidateRouteImport } from './routes/api/revalidate'
 import { Route as ApiFormCacheRouteImport } from './routes/api/form-cache'
 import { Route as ApiBuildingsRouteImport } from './routes/api/buildings'
+import { Route as RoomsEditRoomSlugRouteImport } from './routes/rooms/edit.$roomSlug'
 import { Route as DemoFormSimpleRouteImport } from './routes/demo/form.simple'
 import { Route as DemoFormAddressRouteImport } from './routes/demo/form.address'
-import { Route as BuildingsEditBuildingIdRouteImport } from './routes/buildings/edit.$buildingId'
+import { Route as BuildingsEditBuildingSlugRouteImport } from './routes/buildings/edit.$buildingSlug'
 import { Route as ApiR2DevSplatRouteImport } from './routes/api/r2-dev.$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
@@ -31,9 +36,24 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RoomsIndexRoute = RoomsIndexRouteImport.update({
+  id: '/rooms/',
+  path: '/rooms/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BuildingsIndexRoute = BuildingsIndexRouteImport.update({
   id: '/buildings/',
   path: '/buildings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoomsNewRoute = RoomsNewRouteImport.update({
+  id: '/rooms/new',
+  path: '/rooms/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RoomsRoomSlugRoute = RoomsRoomSlugRouteImport.update({
+  id: '/rooms/$roomSlug',
+  path: '/rooms/$roomSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DemoTanstackQueryRoute = DemoTanstackQueryRouteImport.update({
@@ -56,14 +76,19 @@ const BuildingsNewRoute = BuildingsNewRouteImport.update({
   path: '/buildings/new',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BuildingsBuildingIdRoute = BuildingsBuildingIdRouteImport.update({
-  id: '/buildings/$buildingId',
-  path: '/buildings/$buildingId',
+const BuildingsBuildingslugRoute = BuildingsBuildingslugRouteImport.update({
+  id: '/buildings/$buildingslug',
+  path: '/buildings/$buildingslug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiUploadRoute = ApiUploadRouteImport.update({
   id: '/api/upload',
   path: '/api/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiRoomsRoute = ApiRoomsRouteImport.update({
+  id: '/api/rooms',
+  path: '/api/rooms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiRevalidateRoute = ApiRevalidateRouteImport.update({
@@ -81,6 +106,11 @@ const ApiBuildingsRoute = ApiBuildingsRouteImport.update({
   path: '/api/buildings',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RoomsEditRoomSlugRoute = RoomsEditRoomSlugRouteImport.update({
+  id: '/rooms/edit/$roomSlug',
+  path: '/rooms/edit/$roomSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DemoFormSimpleRoute = DemoFormSimpleRouteImport.update({
   id: '/demo/form/simple',
   path: '/demo/form/simple',
@@ -91,11 +121,12 @@ const DemoFormAddressRoute = DemoFormAddressRouteImport.update({
   path: '/demo/form/address',
   getParentRoute: () => rootRouteImport,
 } as any)
-const BuildingsEditBuildingIdRoute = BuildingsEditBuildingIdRouteImport.update({
-  id: '/buildings/edit/$buildingId',
-  path: '/buildings/edit/$buildingId',
-  getParentRoute: () => rootRouteImport,
-} as any)
+const BuildingsEditBuildingSlugRoute =
+  BuildingsEditBuildingSlugRouteImport.update({
+    id: '/buildings/edit/$buildingSlug',
+    path: '/buildings/edit/$buildingSlug',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiR2DevSplatRoute = ApiR2DevSplatRouteImport.update({
   id: '/api/r2-dev/$',
   path: '/api/r2-dev/$',
@@ -112,36 +143,46 @@ export interface FileRoutesByFullPath {
   '/api/buildings': typeof ApiBuildingsRoute
   '/api/form-cache': typeof ApiFormCacheRoute
   '/api/revalidate': typeof ApiRevalidateRoute
+  '/api/rooms': typeof ApiRoomsRoute
   '/api/upload': typeof ApiUploadRoute
-  '/buildings/$buildingId': typeof BuildingsBuildingIdRoute
+  '/buildings/$buildingslug': typeof BuildingsBuildingslugRoute
   '/buildings/new': typeof BuildingsNewRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/rooms/$roomSlug': typeof RoomsRoomSlugRoute
+  '/rooms/new': typeof RoomsNewRoute
   '/buildings/': typeof BuildingsIndexRoute
+  '/rooms/': typeof RoomsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/r2-dev/$': typeof ApiR2DevSplatRoute
-  '/buildings/edit/$buildingId': typeof BuildingsEditBuildingIdRoute
+  '/buildings/edit/$buildingSlug': typeof BuildingsEditBuildingSlugRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
+  '/rooms/edit/$roomSlug': typeof RoomsEditRoomSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/buildings': typeof ApiBuildingsRoute
   '/api/form-cache': typeof ApiFormCacheRoute
   '/api/revalidate': typeof ApiRevalidateRoute
+  '/api/rooms': typeof ApiRoomsRoute
   '/api/upload': typeof ApiUploadRoute
-  '/buildings/$buildingId': typeof BuildingsBuildingIdRoute
+  '/buildings/$buildingslug': typeof BuildingsBuildingslugRoute
   '/buildings/new': typeof BuildingsNewRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/rooms/$roomSlug': typeof RoomsRoomSlugRoute
+  '/rooms/new': typeof RoomsNewRoute
   '/buildings': typeof BuildingsIndexRoute
+  '/rooms': typeof RoomsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/r2-dev/$': typeof ApiR2DevSplatRoute
-  '/buildings/edit/$buildingId': typeof BuildingsEditBuildingIdRoute
+  '/buildings/edit/$buildingSlug': typeof BuildingsEditBuildingSlugRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
+  '/rooms/edit/$roomSlug': typeof RoomsEditRoomSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -149,18 +190,23 @@ export interface FileRoutesById {
   '/api/buildings': typeof ApiBuildingsRoute
   '/api/form-cache': typeof ApiFormCacheRoute
   '/api/revalidate': typeof ApiRevalidateRoute
+  '/api/rooms': typeof ApiRoomsRoute
   '/api/upload': typeof ApiUploadRoute
-  '/buildings/$buildingId': typeof BuildingsBuildingIdRoute
+  '/buildings/$buildingslug': typeof BuildingsBuildingslugRoute
   '/buildings/new': typeof BuildingsNewRoute
   '/demo/better-auth': typeof DemoBetterAuthRoute
   '/demo/table': typeof DemoTableRoute
   '/demo/tanstack-query': typeof DemoTanstackQueryRoute
+  '/rooms/$roomSlug': typeof RoomsRoomSlugRoute
+  '/rooms/new': typeof RoomsNewRoute
   '/buildings/': typeof BuildingsIndexRoute
+  '/rooms/': typeof RoomsIndexRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/api/r2-dev/$': typeof ApiR2DevSplatRoute
-  '/buildings/edit/$buildingId': typeof BuildingsEditBuildingIdRoute
+  '/buildings/edit/$buildingSlug': typeof BuildingsEditBuildingSlugRoute
   '/demo/form/address': typeof DemoFormAddressRoute
   '/demo/form/simple': typeof DemoFormSimpleRoute
+  '/rooms/edit/$roomSlug': typeof RoomsEditRoomSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -169,54 +215,69 @@ export interface FileRouteTypes {
     | '/api/buildings'
     | '/api/form-cache'
     | '/api/revalidate'
+    | '/api/rooms'
     | '/api/upload'
-    | '/buildings/$buildingId'
+    | '/buildings/$buildingslug'
     | '/buildings/new'
     | '/demo/better-auth'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/rooms/$roomSlug'
+    | '/rooms/new'
     | '/buildings/'
+    | '/rooms/'
     | '/api/auth/$'
     | '/api/r2-dev/$'
-    | '/buildings/edit/$buildingId'
+    | '/buildings/edit/$buildingSlug'
     | '/demo/form/address'
     | '/demo/form/simple'
+    | '/rooms/edit/$roomSlug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/api/buildings'
     | '/api/form-cache'
     | '/api/revalidate'
+    | '/api/rooms'
     | '/api/upload'
-    | '/buildings/$buildingId'
+    | '/buildings/$buildingslug'
     | '/buildings/new'
     | '/demo/better-auth'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/rooms/$roomSlug'
+    | '/rooms/new'
     | '/buildings'
+    | '/rooms'
     | '/api/auth/$'
     | '/api/r2-dev/$'
-    | '/buildings/edit/$buildingId'
+    | '/buildings/edit/$buildingSlug'
     | '/demo/form/address'
     | '/demo/form/simple'
+    | '/rooms/edit/$roomSlug'
   id:
     | '__root__'
     | '/'
     | '/api/buildings'
     | '/api/form-cache'
     | '/api/revalidate'
+    | '/api/rooms'
     | '/api/upload'
-    | '/buildings/$buildingId'
+    | '/buildings/$buildingslug'
     | '/buildings/new'
     | '/demo/better-auth'
     | '/demo/table'
     | '/demo/tanstack-query'
+    | '/rooms/$roomSlug'
+    | '/rooms/new'
     | '/buildings/'
+    | '/rooms/'
     | '/api/auth/$'
     | '/api/r2-dev/$'
-    | '/buildings/edit/$buildingId'
+    | '/buildings/edit/$buildingSlug'
     | '/demo/form/address'
     | '/demo/form/simple'
+    | '/rooms/edit/$roomSlug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -224,18 +285,23 @@ export interface RootRouteChildren {
   ApiBuildingsRoute: typeof ApiBuildingsRoute
   ApiFormCacheRoute: typeof ApiFormCacheRoute
   ApiRevalidateRoute: typeof ApiRevalidateRoute
+  ApiRoomsRoute: typeof ApiRoomsRoute
   ApiUploadRoute: typeof ApiUploadRoute
-  BuildingsBuildingIdRoute: typeof BuildingsBuildingIdRoute
+  BuildingsBuildingslugRoute: typeof BuildingsBuildingslugRoute
   BuildingsNewRoute: typeof BuildingsNewRoute
   DemoBetterAuthRoute: typeof DemoBetterAuthRoute
   DemoTableRoute: typeof DemoTableRoute
   DemoTanstackQueryRoute: typeof DemoTanstackQueryRoute
+  RoomsRoomSlugRoute: typeof RoomsRoomSlugRoute
+  RoomsNewRoute: typeof RoomsNewRoute
   BuildingsIndexRoute: typeof BuildingsIndexRoute
+  RoomsIndexRoute: typeof RoomsIndexRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
   ApiR2DevSplatRoute: typeof ApiR2DevSplatRoute
-  BuildingsEditBuildingIdRoute: typeof BuildingsEditBuildingIdRoute
+  BuildingsEditBuildingSlugRoute: typeof BuildingsEditBuildingSlugRoute
   DemoFormAddressRoute: typeof DemoFormAddressRoute
   DemoFormSimpleRoute: typeof DemoFormSimpleRoute
+  RoomsEditRoomSlugRoute: typeof RoomsEditRoomSlugRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -247,11 +313,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rooms/': {
+      id: '/rooms/'
+      path: '/rooms'
+      fullPath: '/rooms/'
+      preLoaderRoute: typeof RoomsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/buildings/': {
       id: '/buildings/'
       path: '/buildings'
       fullPath: '/buildings/'
       preLoaderRoute: typeof BuildingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rooms/new': {
+      id: '/rooms/new'
+      path: '/rooms/new'
+      fullPath: '/rooms/new'
+      preLoaderRoute: typeof RoomsNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rooms/$roomSlug': {
+      id: '/rooms/$roomSlug'
+      path: '/rooms/$roomSlug'
+      fullPath: '/rooms/$roomSlug'
+      preLoaderRoute: typeof RoomsRoomSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/demo/tanstack-query': {
@@ -282,11 +369,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof BuildingsNewRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/buildings/$buildingId': {
-      id: '/buildings/$buildingId'
-      path: '/buildings/$buildingId'
-      fullPath: '/buildings/$buildingId'
-      preLoaderRoute: typeof BuildingsBuildingIdRouteImport
+    '/buildings/$buildingslug': {
+      id: '/buildings/$buildingslug'
+      path: '/buildings/$buildingslug'
+      fullPath: '/buildings/$buildingslug'
+      preLoaderRoute: typeof BuildingsBuildingslugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/upload': {
@@ -294,6 +381,13 @@ declare module '@tanstack/react-router' {
       path: '/api/upload'
       fullPath: '/api/upload'
       preLoaderRoute: typeof ApiUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/rooms': {
+      id: '/api/rooms'
+      path: '/api/rooms'
+      fullPath: '/api/rooms'
+      preLoaderRoute: typeof ApiRoomsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/revalidate': {
@@ -317,6 +411,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiBuildingsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/rooms/edit/$roomSlug': {
+      id: '/rooms/edit/$roomSlug'
+      path: '/rooms/edit/$roomSlug'
+      fullPath: '/rooms/edit/$roomSlug'
+      preLoaderRoute: typeof RoomsEditRoomSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/demo/form/simple': {
       id: '/demo/form/simple'
       path: '/demo/form/simple'
@@ -331,11 +432,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DemoFormAddressRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/buildings/edit/$buildingId': {
-      id: '/buildings/edit/$buildingId'
-      path: '/buildings/edit/$buildingId'
-      fullPath: '/buildings/edit/$buildingId'
-      preLoaderRoute: typeof BuildingsEditBuildingIdRouteImport
+    '/buildings/edit/$buildingSlug': {
+      id: '/buildings/edit/$buildingSlug'
+      path: '/buildings/edit/$buildingSlug'
+      fullPath: '/buildings/edit/$buildingSlug'
+      preLoaderRoute: typeof BuildingsEditBuildingSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/r2-dev/$': {
@@ -360,18 +461,23 @@ const rootRouteChildren: RootRouteChildren = {
   ApiBuildingsRoute: ApiBuildingsRoute,
   ApiFormCacheRoute: ApiFormCacheRoute,
   ApiRevalidateRoute: ApiRevalidateRoute,
+  ApiRoomsRoute: ApiRoomsRoute,
   ApiUploadRoute: ApiUploadRoute,
-  BuildingsBuildingIdRoute: BuildingsBuildingIdRoute,
+  BuildingsBuildingslugRoute: BuildingsBuildingslugRoute,
   BuildingsNewRoute: BuildingsNewRoute,
   DemoBetterAuthRoute: DemoBetterAuthRoute,
   DemoTableRoute: DemoTableRoute,
   DemoTanstackQueryRoute: DemoTanstackQueryRoute,
+  RoomsRoomSlugRoute: RoomsRoomSlugRoute,
+  RoomsNewRoute: RoomsNewRoute,
   BuildingsIndexRoute: BuildingsIndexRoute,
+  RoomsIndexRoute: RoomsIndexRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
   ApiR2DevSplatRoute: ApiR2DevSplatRoute,
-  BuildingsEditBuildingIdRoute: BuildingsEditBuildingIdRoute,
+  BuildingsEditBuildingSlugRoute: BuildingsEditBuildingSlugRoute,
   DemoFormAddressRoute: DemoFormAddressRoute,
   DemoFormSimpleRoute: DemoFormSimpleRoute,
+  RoomsEditRoomSlugRoute: RoomsEditRoomSlugRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

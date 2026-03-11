@@ -1,5 +1,6 @@
 import { apiClient } from '@/lib/api-client'
 import type { CreateApartmentInput } from '@/lib/validators/building'
+import type { Apartment } from '@repo/db'
 
 export class BuildingsClientService {
   static async getAll(filters?: { page?: number; isPublished?: boolean }) {
@@ -7,22 +8,25 @@ export class BuildingsClientService {
     if (filters?.page) params.set('page', filters.page.toString())
     if (filters?.isPublished)
       params.set('isPublished', filters.isPublished.toString())
-    return apiClient.get('/buildings')
+    return apiClient.get<Apartment[]>('/buildings')
   }
 
-  static async getOne(id: string) {
-    return apiClient.get(`/buildings/${id}`)
+  static async getOne(slug: string) {
+    return apiClient.get<Apartment>(`/buildings?slug=${slug}`)
   }
 
   static async createBuilding(data: CreateApartmentInput) {
     return apiClient.post<CreateApartmentInput>('/buildings', data)
   }
 
-  static async updateBuilding(id: string, data: CreateApartmentInput) {
-    return apiClient.put<CreateApartmentInput>(`/buildings/${id}`, data)
+  static async updateBuilding(slug: string, data: CreateApartmentInput) {
+    return apiClient.put<CreateApartmentInput>(`/buildings?slug=${slug}`, data)
   }
 
-  static async delete(id: string) {
-    return apiClient.delete(`/buildings/${id}`)
+  static async delete(slug: string) {
+    return apiClient.delete(`/buildings`, { slug })
+  }
+  static async deleteImage(key: string) {
+    return apiClient.delete(`/buildings?imageKey=${key}`)
   }
 }

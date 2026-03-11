@@ -8,4 +8,5 @@ export default defineConfig({
   dialect: "sqlite",
   driver: "d1-http",
   verbose: true,
+  strict: true,
 });

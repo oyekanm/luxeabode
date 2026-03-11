@@ -32,7 +32,7 @@ export default function useUploadFile() {
 
         const response: { url: string; key: string } = await result.json()
 
-        console.log(response)
+        // console.log(response)
 
         onUploadSuccess(response)
       }

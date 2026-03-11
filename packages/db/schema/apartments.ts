@@ -1,5 +1,6 @@
 import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
+import type { Room, rooms } from "./rooms";
 
 export const apartments = sqliteTable("apartments", {
   id: text("id")
@@ -51,7 +52,10 @@ export const apartmentImages = sqliteTable("apartment_images", {
   ),
 });
 
-export type Apartment = typeof apartments.$inferSelect;
+export type Apartment = typeof apartments.$inferSelect & {
+  images: ApartmentImage[];
+  rooms: Room[];
+};
 export type ApartmentImage = typeof apartmentImages.$inferSelect;
 
 export type CreateApartment = typeof apartments.$inferInsert;

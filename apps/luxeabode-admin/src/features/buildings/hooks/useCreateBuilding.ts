@@ -1,4 +1,4 @@
-import { getClientError } from '@/lib/helpers/getClientError'
+import { getClientError } from '@repo/helpers/getClientError'
 import { queryKeys } from '@/lib/query-keys'
 import type { CreateApartmentInput } from '@/lib/validators/building'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
@@ -16,22 +16,27 @@ export default function useCreateBuilding() {
     [queryClient],
   )
 
-  const createCategories = async (form: CreateApartmentInput) => {
+  const createCategories = async (
+    form: CreateApartmentInput,
+    resets: () => void,
+  ) => {
     try {
       const resp = await BuildingsClientService.createBuilding(form)
-      console.log(resp)
+      // console.log(resp)
       // if (resp.error) throw new Error(resp.error || "Error fetching data");
       toast.success(resp.message || 'Building created successfully')
       // clear form and cache
+      resets()
     } catch (error: any) {
       const apiError = getClientError(error)
-      console.log(apiError)
+      // console.log(apiError)
       toast.error(apiError?.message || 'failed')
     }
   }
 
   const create = useMutation({
-    mutationFn: createCategories,
+    mutationFn: (v: { form: CreateApartmentInput; resets: () => void }) =>
+      createCategories(v.form, v.resets),
     onSuccess: () => invalidateList(),
     // onMutate: async (newCate) => {
     //   await queryClient.cancelQueries({ queryKey: ['categories'] })
@@ -56,8 +61,11 @@ export default function useCreateBuilding() {
     // },
   })
 
-  const handleCreateBuilding = async (input: CreateApartmentInput) => {
-    await create.mutateAsync(input)
+  const handleCreateBuilding = async (
+    input: CreateApartmentInput,
+    resets: () => void,
+  ) => {
+    await create.mutateAsync({ form: input, resets })
   }
 
   return {

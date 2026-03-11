@@ -20,8 +20,8 @@ import InputText from '@repo/ui/inputText'
 import InputTextArea from "@repo/ui/inputTextArea"
 import UploadImageComp from '@repo/ui/uploadImageComp'
 import UploadedImagePreview from '@repo/ui/uploadedImagePreview'
-import { useFormPersist } from '../hooks/useFormPersist'
-import AddRules from './addRules'
+import { useFormPersist } from '../../../hooks/useFormPersist'
+import AddRules from '../../../components/reuseable/addRules'
 import useUploadFile from '@/hooks/useUploadFIle'
 import useCreateBuilding from '../hooks/useCreateBuilding'
 
@@ -46,30 +46,32 @@ export default function AddNewBuildingForm() {
     mode: "onChange"
   })
 
+  console.log(form.watch())
+
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "images",
   })
   const { createBuilding, createError } = useCreateBuilding()
-  const { handleCancel } = useFormPersist(form, "1")
+  const { handleCancel } = useFormPersist(form, "1", "/buildings")
 
-  const { handleUpload, handleDeleteFile } = useUploadFile()
+  const { handleUpload, handleDeleteFile, isUploading } = useUploadFile()
   const uploadSuccess = (file: { url: string, key: string }) => {
     console.log(file)
     append(file)
   }
 
-  const removeImage = (key: string) => {
-    handleDeleteFile(key, () => remove(fields.findIndex((field) => field.key === key)))
+  const allRemoveKeys = (key: string, removeKey: (key: string) => void) => {
+    remove(fields.findIndex((field) => field.key === key))
+    removeKey(key)
+  }
+
+  const removeImage = (key: string, removeKey: (key: string) => void) => {
+    handleDeleteFile(key, () => allRemoveKeys(key, removeKey))
   }
 
   async function onSubmit(data: CreateApartmentInput) {
-    const res = await createBuilding(data)
-
-    console.log(res)
-    // if(res) {
-    //   form.reset()
-    // }
+    await createBuilding(data, handleCancel)
   }
 
   return (
@@ -115,7 +117,7 @@ export default function AddNewBuildingForm() {
         </CardContainer>
 
         <CardContainer title='Building Media' description='Upload images of the building' className='space-y-8'>
-          <UploadImageComp handleFileUpload={(files) => handleUpload(files, uploadSuccess)} isUploading={false} title='Click to upload primary building image' description='Recommended size: 1920x1080px' />
+          <UploadImageComp handleFileUpload={(files) => handleUpload(files, uploadSuccess)} isUploading={isUploading} title='Click to upload primary building image' description='Recommended size: 1920x1080px' />
           <FormMessage>{form.formState.errors.images?.message}</FormMessage>
           <UploadedImagePreview files={fields} handleRemoveFile={removeImage} />
         </CardContainer>

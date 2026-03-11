@@ -1,5 +1,6 @@
 import GoBack from '@/components/reuseable/goback'
 import AddNewBuildingForm from '@/features/buildings/components/addNewBuildingForm'
+import TitleDescContainer from '@repo/ui/titleDescContainer'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/buildings/new')({
@@ -12,12 +13,7 @@ function RouteComponent() {
       <GoBack to="/buildings" title="Back to Buildings" />
 
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <div>
-          <h1 className="page-title">Add New Building</h1>
-          <p className="text-neutral-500 text-base">
-            Create a new building location to house your apartment units.
-          </p>
-        </div>
+        <TitleDescContainer title={"Add New Building"} desc='Create a new building location to house your apartment units.' />
       </div>
       <AddNewBuildingForm />
     </div>

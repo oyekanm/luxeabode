@@ -1,27 +1,53 @@
 import { getDb } from '@/lib/db'
 import { CreateApartmentSchema } from '@/lib/validators/building'
 import { BuildingsServerService } from '@/services/server/buildings'
-import { ValidationError } from '@repo/services/errors'
+import {
+  BadRequestError,
+  NotFoundError,
+  ValidationError,
+} from '@repo/services/errors'
 import { handleError } from '@repo/services/handle-error'
 import { createFileRoute } from '@tanstack/react-router'
 import { env } from 'cloudflare:workers'
+import { BuildingsService } from '@repo/services/buildings'
 
 export const Route = createFileRoute('/api/buildings')({
   server: {
     handlers: {
       GET: async ({ request }) => {
-        // TODO: add authentication check
+        try {
+          const db = getDb(env.DB)
+          const url = new URL(request.url)
+          const slug = url.searchParams.get('slug')
 
-        const db = getDb(env.DB)
-        const r2 = env.R2
-        const apartments = await db.query.apartments.findMany({
-          with: {
-            images: true,
-          },
-        })
-        const kv = env.KV
-        const response = await BuildingsServerService.getAll(db)
-        return new Response(JSON.stringify(response), { status: 200 })
+          // TODO: add authentication check
+
+          // single apartment building query
+          if (slug) {
+            const response = await BuildingsService.getBySlug(db, slug)
+            if (!response) throw new NotFoundError(slug)
+            return new Response(
+              JSON.stringify({
+                data: response,
+                success: true,
+                message: `${response?.name} detail fetched successfully`,
+              }),
+              { status: 200 },
+            )
+          }
+
+          const response = await BuildingsService.getAll(db)
+          return new Response(
+            JSON.stringify({
+              data: response,
+              success: true,
+              message: 'Buildings fetched successfully',
+            }),
+            { status: 200 },
+          )
+        } catch (error) {
+          return handleError(error)
+        }
       },
       POST: async ({ request }) => {
         try {
@@ -38,11 +64,101 @@ export const Route = createFileRoute('/api/buildings')({
 
           await BuildingsServerService.create(validated.data, db)
           return new Response(
-            JSON.stringify({ message: 'Building created successfully' }),
+            JSON.stringify({
+              message: 'Building created successfully',
+              success: true,
+            }),
             { status: 201 },
           )
         } catch (error) {
           return handleError(error)
+        }
+      },
+      PUT: async ({ request }) => {
+        try {
+          const url = new URL(request.url)
+          const slug = url.searchParams.get('slug')
+          const body = await request.json()
+          const validated = CreateApartmentSchema.safeParse(body)
+
+          const db = getDb(env.DB)
+          const r2 = env.R2
+
+          if (!slug || typeof slug !== 'string') {
+            throw new BadRequestError(
+              'Invalid request, please provide the building slug',
+            )
+          }
+
+          if (!validated.success) {
+            throw new ValidationError(
+              'Invalid request, please fill out the required fields',
+            )
+          }
+
+          await BuildingsServerService.update(
+            slug,
+            validated.data,
+            db,
+            r2,
+            env.R2_BASE_URL,
+          )
+          return new Response(
+            JSON.stringify({
+              message: 'Building updated successfully',
+              success: true,
+            }),
+            { status: 200 },
+          )
+        } catch (error) {
+          return handleError(error)
+        }
+      },
+      DELETE: async ({ request }) => {
+        const db = getDb(env.DB)
+        const r2 = env.R2
+        const url = new URL(request.url)
+        const imageKey = url.searchParams.get('imageKey')
+        try {
+          if (imageKey) {
+            if (typeof imageKey !== 'string') {
+              throw new BadRequestError(
+                'Invalid request, please provide the image key',
+              )
+            }
+            await BuildingsService.deleteImage(
+              db,
+              imageKey,
+              r2,
+              env.R2_BASE_URL,
+            )
+            return new Response(
+              JSON.stringify({
+                message: 'image deleted successfully',
+                success: true,
+              }),
+              { status: 200 },
+            )
+          }
+
+          const body = await request.json()
+          const { slug } = body as { slug: string }
+          if (!slug || typeof slug !== 'string') {
+            throw new BadRequestError(
+              'Invalid request, please provide the building slug',
+            )
+          }
+
+          await BuildingsServerService.delete(slug, db, r2, env.R2_BASE_URL)
+          return new Response(
+            JSON.stringify({
+              message: `${slug} deleted successfully`,
+              success: true,
+            }),
+            { status: 200 },
+          )
+        } catch (error) {
+          handleError(error)
         }
       },
     },

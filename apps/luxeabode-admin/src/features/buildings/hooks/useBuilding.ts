@@ -1,7 +1,7 @@
 // apps/admin/src/hooks/use-buildings.ts
 import { queryKeys } from '@/lib/query-keys'
 import { useQuery } from '@tanstack/react-query'
-import { getClientError } from '@/lib/helpers/getClientError'
+import { getClientError } from '@repo/helpers/getClientError'
 import { BuildingsClientService } from '../buildingClientService'
 
 export function useBuildings(filters?: {

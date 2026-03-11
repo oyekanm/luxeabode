@@ -57,6 +57,8 @@ export const Route = createFileRoute('/api/form-cache')({
           )
         }
 
+        console.log(body, 'body')
+
         await addCachedData(kv, `form-${userId}`, body.values, 1800)
         return new Response(JSON.stringify({ success: true }), { status: 200 })
       },

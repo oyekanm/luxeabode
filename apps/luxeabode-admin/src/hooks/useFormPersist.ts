@@ -1,16 +1,16 @@
 // features/apartments/hooks/useFormPersist.ts
-import type { CreateApartmentInput } from '@/lib/validators/building'
-import type { UseFormReturn } from '@repo/ui/form'
-import { useEffect, useState } from 'react'
 import { useDebounce } from '@/hooks/useDebounce'
+import type { UseFormReturn } from '@repo/ui/form'
 import { useRouter } from '@tanstack/react-router'
+import { useEffect, useState } from 'react'
 
 export function useFormPersist(
-  methods: UseFormReturn<CreateApartmentInput>,
+  methods: UseFormReturn<any>,
   userId: string,
+  route: string,
 ) {
   const [loaded, setLoaded] = useState(false)
-  const { watch, reset } = methods
+  const { watch, reset, getValues } = methods
   const debounce = useDebounce(1500)
   const router = useRouter()
 
@@ -20,7 +20,7 @@ export function useFormPersist(
         method: 'DELETE',
       })
       methods.reset()
-      router.navigate({ to: '/buildings' })
+      router.navigate({ to: route })
     } catch (error) {
       console.log(error)
     }
@@ -37,7 +37,13 @@ export function useFormPersist(
         const res = await fetch(`/api/form-cache?userId=${userId}`)
         const cachedData = await res.json()
 
-        if (res.status === 200) reset(cachedData as any)
+        console.log(cachedData)
+
+        if (cachedData && Object.keys(cachedData).length > 0) {
+          reset(cachedData, {
+            keepDefaultValues: false,
+          })
+        }
       } catch (error) {
         console.log(error)
       } finally {
@@ -49,7 +55,12 @@ export function useFormPersist(
 
   // Sync to KV (Debounced)
   useEffect(() => {
-    if (!loaded) return
+    if (!loaded || !methods.formState.isDirty) return
+    const currentValues = getValues()
+    const value = watch()
+
+    console.log(currentValues, 'currentValues')
+    console.log(value, 'value')
     const saveCache = async () => {
       try {
         await fetch('/api/form-cache', {

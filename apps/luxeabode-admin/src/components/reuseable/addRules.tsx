@@ -52,7 +52,7 @@ export default function AddRules() {
                 }
                 <FunctionalButton type='button' className='flex items-center gap-2' click={() => form.setValue("rules", [...rules, ""])}>
                     <Plus className='icon-size' />
-                    Add Amenity
+                    Add a Rule
                 </FunctionalButton>
             </div>
         </div>

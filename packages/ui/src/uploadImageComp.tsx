@@ -35,7 +35,7 @@ export default function UploadImageComp(props: UploadImageCompProps) {
                         <input {...getInputProps()} disabled={isUploading} />
                         <div className="border-2 border-dashed border-border rounded-xl py-16 p-8 text-center hover:border-primary hover:bg-primary/5 transition-colors cursor-pointer">
                             {isUploading ? (
-                                <Spinner className="size-8!" />
+                                <Spinner className="size-16! mx-auto" />
                             ) : (
                                 <>
                                     <Upload className="size-16 text-neutral-500 mx-auto" />

@@ -1,6 +1,6 @@
 import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
-import { apartments } from "./apartments";
+import { apartments, type Apartment } from "./apartments";
 
 export const rooms = sqliteTable("rooms", {
   id: text("id")
@@ -13,7 +13,7 @@ export const rooms = sqliteTable("rooms", {
   name: text("name").notNull(), // e.g. "Deluxe Suite", "Room 3A"
   description: text("description").notNull(),
   type: text("type", {
-    enum: ["single", "double", "suite", "studio", "penthouse"],
+    enum: ["single", "double", "mini-suite", "suite", "studio", "penthouse"],
   }).notNull(),
   // booking mode: can a room be booked alone, or only as part of whole-apartment booking
   bookingMode: text("booking_mode", {
@@ -24,21 +24,21 @@ export const rooms = sqliteTable("rooms", {
   maxGuests: integer("max_guests").notNull().default(2),
   bedrooms: integer("bedrooms").notNull().default(1),
   bathrooms: real("bathrooms").notNull().default(1), // 1.5 = 1 full + 1 half
-  floorNumber: integer("floor_number"),
-  sizeM2: real("size_m2"),
+  hasSittingRoom: integer("has_sitting_room", { mode: "boolean" })
+    .notNull()
+    .default(false),
+
+  // floorNumber: integer("floor_number"),
   // pricing
   nightlyRate: real("nightly_rate").notNull(), // base nightly price
   monthlyRate: real("monthly_rate"), // discounted monthly rate
-  cleaningFee: real("cleaning_fee").notNull().default(0),
-  securityDeposit: real("security_deposit").default(0),
+  // cleaningFee: real("cleaning_fee").notNull().default(0),
+  // securityDeposit: real("security_deposit").default(0),
   // room-specific amenities (bed type, AC, balcony, etc.)
-  amenities: text("amenities", { mode: "json" })
-    .$type<RoomAmenity[]>()
-    .default([]),
+  amenities: text("amenities", { mode: "json" }).$type<string[]>().default([]),
   // room-specific rules that override/extend apartment rules
   rules: text("rules", { mode: "json" }).$type<string[]>().default([]),
-  coverImageKey: text("cover_image_key"),
-  sortOrder: integer("sort_order").notNull().default(0),
+  // sortOrder: integer("sort_order").notNull().default(0),
   isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
     () => new Date(),
@@ -55,7 +55,8 @@ export const roomImages = sqliteTable("room_images", {
   roomId: text("room_id")
     .notNull()
     .references(() => rooms.id, { onDelete: "cascade" }),
-  r2Key: text("r2_key").notNull(),
+  key: text("key").notNull(),
+  url: text("url").notNull(),
   altText: text("alt_text"),
   sortOrder: integer("sort_order").notNull().default(0),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
@@ -82,15 +83,8 @@ export const roomPricingRules = sqliteTable("room_pricing_rules", {
   ),
 });
 
-export type RoomAmenity = {
-  name: string;
-  icon: string;
-  category:
-    | "bed"
-    | "bathroom"
-    | "kitchen"
-    | "entertainment"
-    | "climate"
-    | "outdoor"
-    | "other";
+export type Room = typeof rooms.$inferSelect & {
+  images: RoomImage[];
+  apartment: Apartment;
 };
+export type RoomImage = typeof roomImages.$inferSelect;

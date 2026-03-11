@@ -1,0 +1,1 @@
+ALTER TABLE `room_images` ADD `url` text NOT NULL;
