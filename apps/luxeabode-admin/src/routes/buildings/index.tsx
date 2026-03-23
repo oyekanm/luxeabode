@@ -45,9 +45,9 @@ function BuildingsManagementPage() {
           <BuildingCard key={building.id} building={building} />
         ))}
       </div>}
-      {listError?.status === 404 && (
+      {!isLoading && buildings?.data?.length === 0 && (
         <NotFoundErrorMessage
-          title={listError.message || "No Buildings Found"}
+          title={"No Buildings Found"}
           desc="It looks like there are no buildings in the system yet. Click the button below to add your first building."
           btnText='Add New Building'
           onClick={() => navigate({ to: '/buildings/new' })}

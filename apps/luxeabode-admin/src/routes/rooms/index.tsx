@@ -42,7 +42,7 @@ function RouteComponent() {
             </div>}
             {rooms?.data?.length === 0 && (
                 <NotFoundErrorMessage
-                    title={listError?.message || "No Rooms Found"}
+                    title={"No Rooms Found"}
                     desc="It looks like there are no rooms in the system yet. Click the button below to add your first room."
                     btnText='Add New Room'
                     onClick={() => navigate({ to: '/rooms/new' })}

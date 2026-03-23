@@ -53,8 +53,8 @@ export const apartmentImages = sqliteTable("apartment_images", {
 });
 
 export type Apartment = typeof apartments.$inferSelect & {
-  images: ApartmentImage[];
-  rooms: Room[];
+  rooms?: Room[];
+  images?: ApartmentImage[];
 };
 export type ApartmentImage = typeof apartmentImages.$inferSelect;
 

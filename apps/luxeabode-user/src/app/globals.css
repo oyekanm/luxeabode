@@ -1,0 +1,12 @@
+@import "../../../../packages/ui/src/theme.css";
+@import "../../../../packages/ui/src/variables.css";
+@source "../../../../packages/ui/src/";
+@source "../../src/";
+
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+.page-title {
+  @apply text-4xl text-neutral-900 font-bold;
+}

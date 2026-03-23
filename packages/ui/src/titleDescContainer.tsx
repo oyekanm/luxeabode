@@ -1,4 +1,5 @@
 import React from 'react'
+import { cn } from './cn'
 
 interface Props {
     title: string
@@ -8,7 +9,7 @@ interface Props {
 
 export default function TitleDescContainer({ title, desc, className }: Props) {
     return (
-        <div className={className}>
+        <div className={cn("space-y-4", className)}>
             <h1 className="page-title">
                 {title}
             </h1>

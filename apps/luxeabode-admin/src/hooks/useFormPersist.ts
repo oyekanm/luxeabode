@@ -37,8 +37,8 @@ export function useFormPersist(
         const res = await fetch(`/api/form-cache?userId=${userId}`)
         const cachedData = await res.json()
 
-        console.log(cachedData)
-
+        // ensure the data from cache is actually an object with data and not empty object
+        // this helps to keep the form without distrupting it˝
         if (cachedData && Object.keys(cachedData).length > 0) {
           reset(cachedData, {
             keepDefaultValues: false,
@@ -56,11 +56,7 @@ export function useFormPersist(
   // Sync to KV (Debounced)
   useEffect(() => {
     if (!loaded || !methods.formState.isDirty) return
-    const currentValues = getValues()
-    const value = watch()
 
-    console.log(currentValues, 'currentValues')
-    console.log(value, 'value')
     const saveCache = async () => {
       try {
         await fetch('/api/form-cache', {

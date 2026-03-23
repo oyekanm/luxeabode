@@ -1,5 +1,5 @@
 # perform api call for creating an apartment
-POST http://localhost:4000/api/buildings
+GET  http://localhost:3000/api/buildings/dko
 Content-Type: application/json
 
 {

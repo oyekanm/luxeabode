@@ -9,7 +9,7 @@ export const CreateApartmentSchema = z.object({
   country: z.string().min(1, 'Country is required'),
   checkInTime: z.string().min(1, 'Check-in time is required'),
   checkOutTime: z.string().min(1, 'Check-out time is required'),
-  minStayNights: z.number().optional(),
+  minStayNights: z.coerce.number().optional(),
   rules: z.array(z.string()).optional(),
   images: z
     .array(

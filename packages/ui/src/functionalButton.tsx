@@ -8,19 +8,19 @@ type Props = {
   click?: () => void;
   disable?: boolean;
   type?: "button" | "reset" | "submit";
-  variant?: "default" | "outline" | "ghost" | "link" | "destructive";
+  variant?: "default" | "outline" | "ghost" | "link" | "destructive" | "secondary";
   className?: HTMLProps<HTMLElement>["className"];
   asChild?: boolean;
   size?:
-    | "default"
-    | "sm"
-    | "xs"
-    | "lg"
-    | "icon"
-    | "icon-xs"
-    | "icon-sm"
-    | "icon-lg"
-    | null;
+  | "default"
+  | "sm"
+  | "xs"
+  | "lg"
+  | "icon"
+  | "icon-xs"
+  | "icon-sm"
+  | "icon-lg"
+  | null;
 };
 
 export default function FunctionalButton({
@@ -41,8 +41,7 @@ export default function FunctionalButton({
       type={type}
       disabled={disable}
       className={cn(
-        `cursor-pointer font-semibold text-base w-fit h-[4.8rem] radius-[.8rem] p-[1.6rem] px-[2.4rem]   ${
-          disable ? "bg-[#EFEFEB]" : ""
+        `cursor-pointer font-semibold text-base w-fit h-[4.8rem] radius-[.8rem] p-[1.6rem] px-[2.4rem]   ${disable ? "bg-[#EFEFEB]" : "text-primary"
         }`,
         className,
       )}

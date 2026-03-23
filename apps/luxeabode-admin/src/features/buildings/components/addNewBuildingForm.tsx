@@ -46,18 +46,18 @@ export default function AddNewBuildingForm() {
     mode: "onChange"
   })
 
-  console.log(form.watch())
+  // console.log(form.watch())
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
     name: "images",
   })
-  const { createBuilding, createError } = useCreateBuilding()
+  const { createBuilding } = useCreateBuilding()
   const { handleCancel } = useFormPersist(form, "1", "/buildings")
 
   const { handleUpload, handleDeleteFile, isUploading } = useUploadFile()
   const uploadSuccess = (file: { url: string, key: string }) => {
-    console.log(file)
+    // console.log(file)
     append(file)
   }
 

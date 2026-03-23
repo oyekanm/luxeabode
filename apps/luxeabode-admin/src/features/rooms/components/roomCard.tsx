@@ -1,9 +1,10 @@
 // import type { Apartment } from '@repo/db/schema'
-import type { Apartment, Room } from '@repo/db'
+import type { Room } from '@repo/db'
+import formatNairaCurrency from "@repo/helpers/formatNairaCurrency"
 import CardContainer from '@repo/ui/cardContainer'
 import FunctionalButton from '@repo/ui/functionalButton'
 import { Link } from '@tanstack/react-router'
-import { Bed, Building2, Edit2, Eye, MapPin, Trash2, Users } from 'lucide-react'
+import { Bed, Edit2, Eye, Trash2, Users } from 'lucide-react'
 import useDeleteRoom from '../hooks/useDeleteRoom'
 
 interface RoomCardProps {
@@ -27,7 +28,7 @@ export default function RoomCard({ room }: RoomCardProps) {
                         <div className="flex items-center justify-center md:justify-start gap-4">
                             <h3 className="strong text-2xl font-bold">{room.name}</h3>
                             <div className='text-sm text-neutral-500 border border-border/50 px-2 py-1 rounded-full'>
-                                {room.apartment.name}
+                                {room.apartment?.name}
                             </div>
                             <span>available</span>
                             {/* available / occupied */}
@@ -39,7 +40,7 @@ export default function RoomCard({ room }: RoomCardProps) {
                             <span className="flex items-center gap-1">
                                 <Bed className="icon-size" /> {room.bedrooms} Bed(s)
                             </span>
-                            <span className="font-bold text-foreground">${room.nightlyRate}/night</span>
+                            <span className="font-bold text-foreground">{formatNairaCurrency(room.nightlyRate)}/night</span>
                         </div>
                     </div>
 

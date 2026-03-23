@@ -54,6 +54,13 @@ export function handleError(error: unknown): Response {
         { status: 400 },
       );
     }
+    return Response.json(
+      {
+        error: error.message || "Internal server error",
+        code: "INTERNAL_ERROR",
+      },
+      { status: 500 },
+    );
   }
 
   return Response.json(

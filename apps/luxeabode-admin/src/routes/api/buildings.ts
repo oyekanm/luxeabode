@@ -46,6 +46,7 @@ export const Route = createFileRoute('/api/buildings')({
             { status: 200 },
           )
         } catch (error) {
+          console.log(error, 'error')
           return handleError(error)
         }
       },

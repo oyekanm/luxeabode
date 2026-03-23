@@ -37,9 +37,12 @@ export const buildingFormFields = [
   {
     name: 'country',
     label: 'Country',
-    type: 'text',
+    type: 'select',
     placeholder: 'Enter building country',
-    required: true
+    required: true,
+    options: [
+      { value: 'Nigeria', label: 'Nigeria' }
+    ]
   },
   {
     name: 'checkInTime',
@@ -58,7 +61,7 @@ export const buildingFormFields = [
   {
     name: 'minStayNights',
     label: 'Minimum Stay Nights',
-    type: 'number',
+    type: 'text',
     placeholder: 'Enter minimum stay nights',
     required: false
   },

@@ -23,17 +23,20 @@ export default function CardContainer({
         className,
       )}
     >
-      <div className="flex items-center justify-between gap-3 flex-wrap ">
-        <div className="space-y-1">
-          {title && (
-            <h1 className="text-lg lg:text-xl  font-semibold text-neutral-900 ">
-              {title}
-            </h1>
-          )}
-          {description && <p className="text-sm xl:text-base font-medium text-neutral-500 ">{description}</p>}
+      {title || description || actionButton && (
+        <div className="flex items-center justify-between gap-3 flex-wrap ">
+          <div className="space-y-1">
+            {title && (
+              <h1 className="text-lg lg:text-xl  font-semibold text-neutral-900 ">
+                {title}
+              </h1>
+            )}
+            {description && <p className="text-sm xl:text-base font-medium text-neutral-500 ">{description}</p>}
+          </div>
+          {actionButton}
         </div>
-        {actionButton}
-      </div>
+      )
+      }
 
       {children}
     </div>

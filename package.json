@@ -4,14 +4,17 @@
   "scripts": {
     "build": "turbo run build",
     "dev:admin": "turbo run dev --filter=luxeabode-admin",
-    "dev:web": "turbo run dev --filter=luxeabode-web",
-    "dev": "turbo run dev --persist-to=./wrangler-data ",
+    "dev:web": "turbo run dev --filter=luxeabode-user",
+    "dev": "turbo run dev",
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "check-types": "turbo run check-types",
     "db:generate": "turbo run generate --filter=@repo/db",
     "db:migrate": "turbo run db:migrate --filter=luxeabode-admin",
-    "db:migrate:remote": "turbo run db:migrate:remote --filter=luxeabode-admin"
+    "db:migrate:remote": "turbo run db:migrate:remote --filter=luxeabode-admin",
+    "preview:user": "turbo run preview --filter=luxeabode-user",
+    "deploy:user": "turbo run deploy --filter=luxeabode-user",
+    "typegen:user": "turbo run cf-typegen --filter=luxeabode-user"
   },
   "devDependencies": {
     "prettier": "^3.7.4",

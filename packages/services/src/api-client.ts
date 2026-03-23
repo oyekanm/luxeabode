@@ -55,7 +55,7 @@ export class ApiClient {
     return {
       data: json.data,
       success: json.success,
-      status: json.status,
+      status: json.status || response.status,
       message: json.message,
     };
   }

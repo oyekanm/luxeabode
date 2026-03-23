@@ -23,7 +23,7 @@ export const roomFormFields = [
             { value: 'single', label: 'Single' },
             { value: 'double', label: 'Double' },
             { value: 'mini-suite', label: 'Mini Suite (1 bedroom + small living area)' },
-            { value: 'suite', label: 'Suite (1 bedroom + 1 living room)' },
+            { value: 'suite', label: 'Suite' },
             { value: 'studio', label: 'Studio (1 room with bed, sitting area & kitchenette)' },
             { value: 'penthouse', label: 'Penthouse (top floor apartment with private terrace)' },
         ]

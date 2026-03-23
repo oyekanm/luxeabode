@@ -32,3 +32,21 @@ export interface KVNamespaceLike {
   ): Promise<void>;
   delete(key: string): Promise<void>;
 }
+
+export type PaginatedResult<T> = {
+  data: T[];
+  nextCursor: string | null; // pass this as cursor for next page
+  prevCursor: string | null; // pass this for previous page
+  hasMore: boolean;
+};
+
+export interface GetRoomsFilters {
+  city?: string;
+  state?: string;
+  isPublished?: boolean;
+  cursor?: string;
+  limit?: number;
+  minPrice?: string;
+  maxPrice?: string;
+  isActive?: boolean;
+}

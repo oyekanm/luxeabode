@@ -15,7 +15,7 @@ export default function AddNewRoomContainer() {
             images: [],
             amenities: [],
             maxGuests: 1,
-            bathrooms: 0,
+            bathrooms: 1,
             bedrooms: 1,
             apartmentId: "",
             bookingMode: "room_only" as CreateRoomInput["bookingMode"],
@@ -35,7 +35,6 @@ export default function AddNewRoomContainer() {
     //     console.log("cancel")
     // }
     const { createRoom } = useCreateRoom(handleCancel)
-    console.log(form.watch())
     const onSubmit = async (data: CreateRoomInput) => {
         await createRoom(data)
     }

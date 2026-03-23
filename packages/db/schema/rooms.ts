@@ -28,6 +28,10 @@ export const rooms = sqliteTable("rooms", {
     .notNull()
     .default(false),
 
+  isPublished: integer("is_published", { mode: "boolean" })
+    .notNull()
+    .default(false),
+
   // floorNumber: integer("floor_number"),
   // pricing
   nightlyRate: real("nightly_rate").notNull(), // base nightly price
@@ -85,6 +89,6 @@ export const roomPricingRules = sqliteTable("room_pricing_rules", {
 
 export type Room = typeof rooms.$inferSelect & {
   images: RoomImage[];
-  apartment: Apartment;
+  apartment?: Partial<Apartment>;
 };
 export type RoomImage = typeof roomImages.$inferSelect;
