@@ -9,7 +9,7 @@ import {
 import { handleError } from '@repo/services/handle-error'
 import { createFileRoute } from '@tanstack/react-router'
 import { env } from 'cloudflare:workers'
-import { BuildingsService } from '@repo/services/buildings'
+import { BuildingsService } from '@repo/services/server/buildings'
 
 export const Route = createFileRoute('/api/buildings')({
   server: {

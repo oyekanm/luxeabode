@@ -112,9 +112,6 @@ export class ApiClient {
   }
 }
 
-// TODO:add full url for api calls
-// export const apiClient = new ApiClient(``);
-
 export class ApiError extends Error {
   constructor(
     message: string,

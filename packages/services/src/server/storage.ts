@@ -1,6 +1,6 @@
 // packages/services/src/storage.ts
-import { AppError, NotFoundError } from "./errors";
-import type { R2BucketLike } from "./types";
+import { AppError, NotFoundError } from "../errors";
+import type { R2BucketLike } from "../types";
 
 export type UploadResult = {
   key: string;

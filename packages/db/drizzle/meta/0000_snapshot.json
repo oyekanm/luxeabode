@@ -1,11 +1,11 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "aa8520cd-fdfb-412e-9f5d-4695f9f3c46a",
+  "id": "f5f3be60-1a6a-4673-8d82-ab3e0e1fc25d",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
-    "oauth_accounts": {
-      "name": "oauth_accounts",
+    "account": {
+      "name": "account",
       "columns": {
         "id": {
           "name": "id",
@@ -14,22 +14,22 @@
           "notNull": true,
           "autoincrement": false
         },
+        "account_id": {
+          "name": "account_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "provider_id": {
+          "name": "provider_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
         "user_id": {
           "name": "user_id",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "provider": {
-          "name": "provider",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
-        "provider_account_id": {
-          "name": "provider_account_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -49,9 +49,37 @@
           "notNull": false,
           "autoincrement": false
         },
-        "expires_at": {
-          "name": "expires_at",
+        "id_token": {
+          "name": "id_token",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "access_token_expires_at": {
+          "name": "access_token_expires_at",
           "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "refresh_token_expires_at": {
+          "name": "refresh_token_expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "scope": {
+          "name": "scope",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "password": {
+          "name": "password",
+          "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
@@ -60,15 +88,22 @@
           "name": "created_at",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
           "autoincrement": false
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "oauth_accounts_user_id_users_id_fk": {
-          "name": "oauth_accounts_user_id_users_id_fk",
-          "tableFrom": "oauth_accounts",
+        "account_user_id_users_id_fk": {
+          "name": "account_user_id_users_id_fk",
+          "tableFrom": "account",
           "tableTo": "users",
           "columnsFrom": [
             "user_id"
@@ -108,6 +143,20 @@
           "notNull": true,
           "autoincrement": false
         },
+        "ip_address": {
+          "name": "ip_address",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "user_agent": {
+          "name": "user_agent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
         "expires_at": {
           "name": "expires_at",
           "type": "integer",
@@ -117,6 +166,13 @@
         },
         "created_at": {
           "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
           "type": "integer",
           "primaryKey": false,
           "notNull": false,
@@ -182,13 +238,6 @@
           "notNull": false,
           "autoincrement": false
         },
-        "hashed_password": {
-          "name": "hashed_password",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false
-        },
         "oauth_provider": {
           "name": "oauth_provider",
           "type": "text",
@@ -203,27 +252,11 @@
           "notNull": false,
           "autoincrement": false
         },
-        "role": {
-          "name": "role",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": "'user'"
-        },
-        "permissions": {
-          "name": "permissions",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": "'[]'"
-        },
         "is_email_verified": {
           "name": "is_email_verified",
           "type": "integer",
           "primaryKey": false,
-          "notNull": true,
+          "notNull": false,
           "autoincrement": false,
           "default": false
         },
@@ -264,8 +297,8 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "apartment_images": {
-      "name": "apartment_images",
+    "verification": {
+      "name": "verification",
       "columns": {
         "id": {
           "name": "id",
@@ -274,8 +307,60 @@
           "notNull": true,
           "autoincrement": false
         },
-        "apartment_id": {
-          "name": "apartment_id",
+        "identifier": {
+          "name": "identifier",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "value": {
+          "name": "value",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "building_images": {
+      "name": "building_images",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "building_id": {
+          "name": "building_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -320,12 +405,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "apartment_images_apartment_id_apartments_id_fk": {
-          "name": "apartment_images_apartment_id_apartments_id_fk",
-          "tableFrom": "apartment_images",
-          "tableTo": "apartments",
+        "building_images_building_id_buildings_id_fk": {
+          "name": "building_images_building_id_buildings_id_fk",
+          "tableFrom": "building_images",
+          "tableTo": "buildings",
           "columnsFrom": [
-            "apartment_id"
+            "building_id"
           ],
           "columnsTo": [
             "id"
@@ -338,8 +423,8 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "apartments": {
-      "name": "apartments",
+    "buildings": {
+      "name": "buildings",
       "columns": {
         "id": {
           "name": "id",
@@ -476,8 +561,8 @@
         }
       },
       "indexes": {
-        "apartments_slug_unique": {
-          "name": "apartments_slug_unique",
+        "buildings_slug_unique": {
+          "name": "buildings_slug_unique",
           "columns": [
             "slug"
           ],
@@ -489,8 +574,8 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "room_images": {
-      "name": "room_images",
+    "apartment_images": {
+      "name": "apartment_images",
       "columns": {
         "id": {
           "name": "id",
@@ -499,15 +584,22 @@
           "notNull": true,
           "autoincrement": false
         },
-        "room_id": {
-          "name": "room_id",
+        "apartment_id": {
+          "name": "apartment_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
           "autoincrement": false
         },
-        "r2_key": {
-          "name": "r2_key",
+        "key": {
+          "name": "key",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "url": {
+          "name": "url",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -538,12 +630,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "room_images_room_id_rooms_id_fk": {
-          "name": "room_images_room_id_rooms_id_fk",
-          "tableFrom": "room_images",
-          "tableTo": "rooms",
+        "apartment_images_apartment_id_apartments_id_fk": {
+          "name": "apartment_images_apartment_id_apartments_id_fk",
+          "tableFrom": "apartment_images",
+          "tableTo": "apartments",
           "columnsFrom": [
-            "room_id"
+            "apartment_id"
           ],
           "columnsTo": [
             "id"
@@ -556,8 +648,8 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "room_pricing_rules": {
-      "name": "room_pricing_rules",
+    "apartment_pricing_rules": {
+      "name": "apartment_pricing_rules",
       "columns": {
         "id": {
           "name": "id",
@@ -566,8 +658,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "room_id": {
-          "name": "room_id",
+        "apartment_id": {
+          "name": "apartment_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -626,12 +718,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "room_pricing_rules_room_id_rooms_id_fk": {
-          "name": "room_pricing_rules_room_id_rooms_id_fk",
-          "tableFrom": "room_pricing_rules",
-          "tableTo": "rooms",
+        "apartment_pricing_rules_apartment_id_apartments_id_fk": {
+          "name": "apartment_pricing_rules_apartment_id_apartments_id_fk",
+          "tableFrom": "apartment_pricing_rules",
+          "tableTo": "apartments",
           "columnsFrom": [
-            "room_id"
+            "apartment_id"
           ],
           "columnsTo": [
             "id"
@@ -644,8 +736,8 @@
       "uniqueConstraints": {},
       "checkConstraints": {}
     },
-    "rooms": {
-      "name": "rooms",
+    "apartments": {
+      "name": "apartments",
       "columns": {
         "id": {
           "name": "id",
@@ -654,8 +746,8 @@
           "notNull": true,
           "autoincrement": false
         },
-        "apartment_id": {
-          "name": "apartment_id",
+        "building_id": {
+          "name": "building_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
@@ -721,19 +813,21 @@
           "autoincrement": false,
           "default": 1
         },
-        "floor_number": {
-          "name": "floor_number",
+        "has_sitting_room": {
+          "name": "has_sitting_room",
           "type": "integer",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
         },
-        "size_m2": {
-          "name": "size_m2",
-          "type": "real",
+        "is_published": {
+          "name": "is_published",
+          "type": "integer",
           "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
+          "notNull": true,
+          "autoincrement": false,
+          "default": false
         },
         "nightly_rate": {
           "name": "nightly_rate",
@@ -748,22 +842,6 @@
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
-        },
-        "cleaning_fee": {
-          "name": "cleaning_fee",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": 0
-        },
-        "security_deposit": {
-          "name": "security_deposit",
-          "type": "real",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false,
-          "default": 0
         },
         "amenities": {
           "name": "amenities",
@@ -780,21 +858,6 @@
           "notNull": false,
           "autoincrement": false,
           "default": "'[]'"
-        },
-        "cover_image_key": {
-          "name": "cover_image_key",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false,
-          "autoincrement": false
-        },
-        "sort_order": {
-          "name": "sort_order",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true,
-          "autoincrement": false,
-          "default": 0
         },
         "is_active": {
           "name": "is_active",
@@ -820,8 +883,8 @@
         }
       },
       "indexes": {
-        "rooms_slug_unique": {
-          "name": "rooms_slug_unique",
+        "apartments_slug_unique": {
+          "name": "apartments_slug_unique",
           "columns": [
             "slug"
           ],
@@ -829,12 +892,12 @@
         }
       },
       "foreignKeys": {
-        "rooms_apartment_id_apartments_id_fk": {
-          "name": "rooms_apartment_id_apartments_id_fk",
-          "tableFrom": "rooms",
-          "tableTo": "apartments",
+        "apartments_building_id_buildings_id_fk": {
+          "name": "apartments_building_id_buildings_id_fk",
+          "tableFrom": "apartments",
+          "tableTo": "buildings",
           "columnsFrom": [
-            "apartment_id"
+            "building_id"
           ],
           "columnsTo": [
             "id"
@@ -857,15 +920,15 @@
           "notNull": true,
           "autoincrement": false
         },
-        "room_id": {
-          "name": "room_id",
+        "apartment_id": {
+          "name": "apartment_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "apartment_id": {
-          "name": "apartment_id",
+        "building_id": {
+          "name": "building_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -909,12 +972,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "blocked_dates_room_id_rooms_id_fk": {
-          "name": "blocked_dates_room_id_rooms_id_fk",
+        "blocked_dates_apartment_id_apartments_id_fk": {
+          "name": "blocked_dates_apartment_id_apartments_id_fk",
           "tableFrom": "blocked_dates",
-          "tableTo": "rooms",
+          "tableTo": "apartments",
           "columnsFrom": [
-            "room_id"
+            "apartment_id"
           ],
           "columnsTo": [
             "id"
@@ -922,12 +985,12 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "blocked_dates_apartment_id_apartments_id_fk": {
-          "name": "blocked_dates_apartment_id_apartments_id_fk",
+        "blocked_dates_building_id_buildings_id_fk": {
+          "name": "blocked_dates_building_id_buildings_id_fk",
           "tableFrom": "blocked_dates",
-          "tableTo": "apartments",
+          "tableTo": "buildings",
           "columnsFrom": [
-            "apartment_id"
+            "building_id"
           ],
           "columnsTo": [
             "id"
@@ -1063,15 +1126,15 @@
           "notNull": true,
           "autoincrement": false
         },
-        "room_id": {
-          "name": "room_id",
+        "apartment_id": {
+          "name": "apartment_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "apartment_id": {
-          "name": "apartment_id",
+        "building_id": {
+          "name": "building_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -1283,12 +1346,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "bookings_room_id_rooms_id_fk": {
-          "name": "bookings_room_id_rooms_id_fk",
+        "bookings_apartment_id_apartments_id_fk": {
+          "name": "bookings_apartment_id_apartments_id_fk",
           "tableFrom": "bookings",
-          "tableTo": "rooms",
+          "tableTo": "apartments",
           "columnsFrom": [
-            "room_id"
+            "apartment_id"
           ],
           "columnsTo": [
             "id"
@@ -1296,12 +1359,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "bookings_apartment_id_apartments_id_fk": {
-          "name": "bookings_apartment_id_apartments_id_fk",
+        "bookings_building_id_buildings_id_fk": {
+          "name": "bookings_building_id_buildings_id_fk",
           "tableFrom": "bookings",
-          "tableTo": "apartments",
+          "tableTo": "buildings",
           "columnsFrom": [
-            "apartment_id"
+            "building_id"
           ],
           "columnsTo": [
             "id"
@@ -1607,15 +1670,15 @@
           "notNull": true,
           "autoincrement": false
         },
-        "room_id": {
-          "name": "room_id",
+        "apartment_id": {
+          "name": "apartment_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
           "autoincrement": false
         },
-        "apartment_id": {
-          "name": "apartment_id",
+        "building_id": {
+          "name": "building_id",
           "type": "text",
           "primaryKey": false,
           "notNull": false,
@@ -1750,12 +1813,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "reviews_room_id_rooms_id_fk": {
-          "name": "reviews_room_id_rooms_id_fk",
+        "reviews_apartment_id_apartments_id_fk": {
+          "name": "reviews_apartment_id_apartments_id_fk",
           "tableFrom": "reviews",
-          "tableTo": "rooms",
+          "tableTo": "apartments",
           "columnsFrom": [
-            "room_id"
+            "apartment_id"
           ],
           "columnsTo": [
             "id"
@@ -1763,12 +1826,12 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "reviews_apartment_id_apartments_id_fk": {
-          "name": "reviews_apartment_id_apartments_id_fk",
+        "reviews_building_id_buildings_id_fk": {
+          "name": "reviews_building_id_buildings_id_fk",
           "tableFrom": "reviews",
-          "tableTo": "apartments",
+          "tableTo": "buildings",
           "columnsFrom": [
-            "apartment_id"
+            "building_id"
           ],
           "columnsTo": [
             "id"
@@ -2117,6 +2180,173 @@
           "onUpdate": "no action"
         }
       },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "tenant_members": {
+      "name": "tenant_members",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "tenant_id": {
+          "name": "tenant_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "role": {
+          "name": "role",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'admin'"
+        },
+        "permissions": {
+          "name": "permissions",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false,
+          "default": "'[]'"
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "tenant_members_tenant_id_tenants_id_fk": {
+          "name": "tenant_members_tenant_id_tenants_id_fk",
+          "tableFrom": "tenant_members",
+          "tableTo": "tenants",
+          "columnsFrom": [
+            "tenant_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "tenants": {
+      "name": "tenants",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "text",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "slug": {
+          "name": "slug",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "custom_domain": {
+          "name": "custom_domain",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "plan": {
+          "name": "plan",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'free'"
+        },
+        "max_buildings": {
+          "name": "max_buildings",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 1
+        },
+        "max_rooms": {
+          "name": "max_rooms",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 10
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "tenants_slug_unique": {
+          "name": "tenants_slug_unique",
+          "columns": [
+            "slug"
+          ],
+          "isUnique": true
+        },
+        "tenants_custom_domain_unique": {
+          "name": "tenants_custom_domain_unique",
+          "columns": [
+            "custom_domain"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
       "checkConstraints": {}

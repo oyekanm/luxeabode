@@ -16,7 +16,7 @@ export function useBuildings(filters?: {
   })
 
   return {
-    buildings: list.data,
+    buildings: list.data?.data,
     isLoading: list.isLoading,
     listError: getClientError(list.error),
   }

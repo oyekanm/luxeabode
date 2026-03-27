@@ -1,8 +1,8 @@
 import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
-import type { Room, rooms } from "./rooms";
+import type { Apartment } from "./rooms";
 
-export const apartments = sqliteTable("apartments", {
+export const buildings = sqliteTable("buildings", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => createId()),
@@ -36,13 +36,13 @@ export const apartments = sqliteTable("apartments", {
   ),
 });
 
-export const apartmentImages = sqliteTable("apartment_images", {
+export const buildingImages = sqliteTable("building_images", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => createId()),
-  apartmentId: text("apartment_id")
+  buildingId: text("building_id")
     .notNull()
-    .references(() => apartments.id, { onDelete: "cascade" }),
+    .references(() => buildings.id, { onDelete: "cascade" }),
   url: text("url").notNull(),
   key: text("key").notNull(), // R2 object key
   altText: text("alt_text"),
@@ -52,10 +52,10 @@ export const apartmentImages = sqliteTable("apartment_images", {
   ),
 });
 
-export type Apartment = typeof apartments.$inferSelect & {
-  rooms?: Room[];
-  images?: ApartmentImage[];
+export type Building = typeof buildings.$inferSelect & {
+  apartments: Apartment[];
+  images: BuildingImage[];
 };
-export type ApartmentImage = typeof apartmentImages.$inferSelect;
+export type BuildingImage = typeof buildingImages.$inferSelect;
 
-export type CreateApartment = typeof apartments.$inferInsert;
+export type CreateBuilding = typeof buildings.$inferInsert;

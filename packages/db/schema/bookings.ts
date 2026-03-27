@@ -1,8 +1,8 @@
 import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
 import { users } from "./users";
-import { rooms } from "./rooms";
-import { apartments } from "./apartments";
+import { apartments } from "./rooms";
+import { buildings } from "./apartments";
 
 export const bookings = sqliteTable("bookings", {
   id: text("id")
@@ -14,8 +14,8 @@ export const bookings = sqliteTable("bookings", {
     .notNull()
     .references(() => users.id),
   // one of these will be set depending on booking type
-  roomId: text("room_id").references(() => rooms.id),
   apartmentId: text("apartment_id").references(() => apartments.id),
+  buildingId: text("building_id").references(() => buildings.id),
   bookingType: text("booking_type", {
     enum: [
       "room_nightly",

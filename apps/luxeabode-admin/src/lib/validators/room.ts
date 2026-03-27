@@ -1,7 +1,7 @@
 import z from 'zod'
 
 export const createRoomSchema = z.object({
-  apartmentId: z.string().min(1, 'Apartment ID is required'),
+  buildingId: z.string().min(1, 'Building ID is required'),
   name: z.string().min(1, 'Room name is required'),
   description: z.string().min(1, 'Room description is required'),
   amenities: z.array(z.string()).min(1, 'Room amenities are required'),

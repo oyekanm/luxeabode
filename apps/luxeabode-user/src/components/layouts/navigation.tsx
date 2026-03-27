@@ -4,47 +4,64 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Building2, Menu, X } from "lucide-react"
 import { useState } from "react"
+import useAuth from "@/hooks/use-auth"
+import FunctionalButton from "@repo/ui/functionalButton"
+import LogoutBtn from "../reuseable/logoutBtn"
 
 export function Navigation() {
+    const { session } = useAuth()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
+    console.log(session)
+
     return (
-        <header className="sticky top-0 z-50 bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/80 border-b border-border">
-            <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <header className="sticky top-0 z-50 bg-card/95  border-b border-border">
+            <nav className="xtrw py-8!">
                 <div className="flex justify-between items-center h-16">
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-2 group">
-                        <div className="w-9 h-9 bg-primary rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
-                            <Building2 className="w-5 h-5 text-primary-foreground" />
+                        <div className="size-12 bg-primary rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform">
+                            <Building2 className="icon-size text-primary-foreground" />
                         </div>
-                        <span className="font-serif text-xl font-bold text-foreground">LuxeStay</span>
+                        <span className="text-xl font-bold text-foreground">Luxeabode</span>
                     </Link>
 
                     {/* Desktop Navigation */}
                     <div className="hidden md:flex items-center gap-8">
-                        <Link
-                            href="/buildings"
-                            className="text-sm font-medium text-foreground hover:text-primary transition-colors"
-                        >
-                            Browse Locations
-                        </Link>
-                        <Link href="/about" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-                            About Us
-                        </Link>
-                        <Link href="/contact" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
-                            Contact
-                        </Link>
+                        {
+                            navigations.map(nav => {
+                                return (
+                                    <Link
+                                        key={nav.href}
+                                        href={nav.href}
+                                        className="text-base font-medium text-neutral-500 hover:text-primary transition-colors"
+                                    >
+                                        {nav.label}
+                                    </Link>
+                                )
+                            })
+                        }
                     </div>
 
                     {/* CTA Buttons */}
-                    <div className="hidden md:flex items-center gap-3">
-                        <Button variant="ghost" asChild>
-                            <Link href="/apartments">Sign In</Link>
-                        </Button>
-                        <Button asChild>
-                            <Link href="/apartments">Book Now</Link>
-                        </Button>
-                    </div>
+                    {session.data ?
+                        (
+                            <div className="hidden md:flex items-center gap-3">
+                                <LogoutBtn />
+                            </div>
+                        )
+                        :
+                        (
+                            <div className="hidden md:flex items-center gap-3">
+                                <FunctionalButton variant="ghost" asChild>
+                                    <Link className="text-primary" href="/auth/sign-in">Sign In</Link>
+                                </FunctionalButton>
+                                <FunctionalButton asChild>
+                                    <Link href="/auth/sign-up">Sign Up</Link>
+                                </FunctionalButton>
+                            </div>
+                        )
+                    }
 
                     {/* Mobile Menu Button */}
                     <button
@@ -93,3 +110,23 @@ export function Navigation() {
         </header>
     )
 }
+
+
+const navigations = [
+    {
+        label: "Browse Locations",
+        href: "/buildings",
+    },
+    {
+        label: "All Apartments",
+        href: "/apartments",
+    },
+    {
+        label: "About Us",
+        href: "/about",
+    },
+    {
+        label: "Contact",
+        href: "/contact",
+    },
+]

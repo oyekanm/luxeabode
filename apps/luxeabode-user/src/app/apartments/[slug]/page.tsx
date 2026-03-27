@@ -5,6 +5,7 @@ import { RoomsClientService } from "@/services/client/roomsClientService"
 import { getClientError } from "@repo/helpers/getClientError"
 import NotFoundErrorMessage from "@repo/ui/notFoundErrorMessage"
 import { ChevronRight } from "lucide-react"
+import ServerErrorMessage from "@repo/ui/serverErrorMessage"
 
 import Link from "next/link"
 
@@ -64,6 +65,14 @@ export default async function ApartmentDetailsPage({ params }: Props) {
             return (
                 <div className="h-240">
                     <NotFoundErrorMessage title="Apartment not found" desc="The apartment you are looking for does not exist." />
+                </div>
+            )
+        }
+
+        if (err?.status === 500) {
+            return (
+                <div className="h-240">
+                    <ServerErrorMessage title="Something went wrong" desc="Please try again later." />
                 </div>
             )
         }

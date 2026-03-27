@@ -23,7 +23,6 @@ export default async function BuildingsListingPage({ searchParams }: PageProps) 
         maxPrice: params.maxPrice ? Number(params.maxPrice) : undefined,
     }
 
-
     const queryClient = new QueryClient()
 
     await queryClient.prefetchQuery({

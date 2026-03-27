@@ -8,22 +8,13 @@ export const users = sqliteTable("users", {
   email: text("email").notNull().unique(),
   name: text("name").notNull(),
   phone: text("phone"),
-  hashedPassword: text("hashed_password").notNull(),
   // oauth
   oauthProvider: text("oauth_provider", { enum: ["google", "github"] }),
   oauthId: text("oauth_id"),
-  // role: regular users vs admins
-  role: text("role", { enum: ["user", "admin", "super_admin"] })
-    .notNull()
-    .default("user"),
-  // admin-specific
-  permissions: text("permissions", { mode: "json" })
-    .$type<AdminPermission[]>()
-    .default([]),
+  isEmailVerified: integer("is_email_verified", { mode: "boolean" }).default(
+    false,
+  ),
 
-  isEmailVerified: integer("is_email_verified", { mode: "boolean" })
-    .notNull()
-    .default(false),
   isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
     () => new Date(),
@@ -33,16 +24,6 @@ export const users = sqliteTable("users", {
   ),
 });
 
-// Fine-grained admin permissions
-export type AdminPermission =
-  | "manage_apartments"
-  | "manage_rooms"
-  | "manage_bookings"
-  | "manage_users"
-  | "manage_payments"
-  | "manage_reviews"
-  | "view_reports";
-
 export const sessions = sqliteTable("sessions", {
   id: text("id")
     .primaryKey()
@@ -51,27 +32,46 @@ export const sessions = sqliteTable("sessions", {
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
   token: text("token").notNull().unique(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
   expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
     () => new Date(),
   ),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).$defaultFn(
+    () => new Date(),
+  ),
 });
 
-export const oauthAccounts = sqliteTable("oauth_accounts", {
-  id: text("id")
-    .primaryKey()
-    .$defaultFn(() => createId()),
+export const accounts = sqliteTable("account", {
+  id: text("id").primaryKey(),
+  accountId: text("account_id").notNull(),
+  providerId: text("provider_id").notNull(),
   userId: text("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
-  provider: text("provider", { enum: ["google", "github"] }).notNull(),
-  providerAccountId: text("provider_account_id").notNull(),
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
-  expiresAt: integer("expires_at", { mode: "timestamp" }),
-  createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
-    () => new Date(),
-  ),
+  idToken: text("id_token"),
+  accessTokenExpiresAt: integer("access_token_expires_at", {
+    mode: "timestamp",
+  }),
+  refreshTokenExpiresAt: integer("refresh_token_expires_at", {
+    mode: "timestamp",
+  }),
+  scope: text("scope"),
+  password: text("password"),
+  createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).notNull(),
+});
+
+export const verifications = sqliteTable("verification", {
+  id: text("id").primaryKey(),
+  identifier: text("identifier").notNull(),
+  value: text("value").notNull(),
+  expiresAt: integer("expires_at", { mode: "timestamp" }).notNull(),
+  createdAt: integer("created_at", { mode: "timestamp" }),
+  updatedAt: integer("updated_at", { mode: "timestamp" }),
 });
 
 export type User = typeof users.$inferSelect;

@@ -1,8 +1,8 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
-import { rooms } from "./rooms";
-import { apartments } from "./apartments";
 import { users } from "./users";
+import { buildings } from "./apartments";
+import { apartments } from "./rooms";
 
 // Admin-created blocked dates (maintenance, private use, etc.)
 export const blockedDates = sqliteTable("blocked_dates", {
@@ -10,8 +10,10 @@ export const blockedDates = sqliteTable("blocked_dates", {
     .primaryKey()
     .$defaultFn(() => createId()),
   // block either a specific room or the whole apartment
-  roomId: text("room_id").references(() => rooms.id, { onDelete: "cascade" }),
   apartmentId: text("apartment_id").references(() => apartments.id, {
+    onDelete: "cascade",
+  }),
+  buildingId: text("building_id").references(() => buildings.id, {
     onDelete: "cascade",
   }),
   startDate: text("start_date").notNull(), // ISO date YYYY-MM-DD

@@ -5,29 +5,8 @@
     {
       "idx": 0,
       "version": "6",
-      "when": 1772700603952,
-      "tag": "0000_true_avengers",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "6",
-      "when": 1773007940235,
-      "tag": "0001_lean_satana",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "6",
-      "when": 1773189108954,
-      "tag": "0002_misty_kronos",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "6",
-      "when": 1774091543108,
-      "tag": "0003_married_galactus",
+      "when": 1774615982820,
+      "tag": "0000_dusty_jazinda",
       "breakpoints": true
     }
   ]

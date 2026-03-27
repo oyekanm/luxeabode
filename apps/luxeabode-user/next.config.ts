@@ -1,3 +1,6 @@
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+initOpenNextCloudflareForDev({ persist: { path: "../../.wrangler/state/v3" } });
+
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -22,6 +25,3 @@ const nextConfig: NextConfig = {
 };
 
 export default nextConfig;
-
-import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
-initOpenNextCloudflareForDev({ persist: { path: "../../.wrangler/state/v3" } });

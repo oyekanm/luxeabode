@@ -18,7 +18,7 @@ export const CreateApartmentSchema = z.object({
         key: z.string().min(1, 'R2 Key is required'),
       }),
     )
-    .min(1, 'Add atleast one Image'),
+    .min(5, 'Add atleast 5 Images'),
 })
 
 export type CreateApartmentInput = z.infer<typeof CreateApartmentSchema>

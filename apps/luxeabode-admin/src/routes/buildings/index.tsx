@@ -4,6 +4,7 @@ import CardContainer from '@repo/ui/cardContainer'
 import FunctionalButton from '@repo/ui/functionalButton'
 import InputText from '@repo/ui/inputText'
 import NotFoundErrorMessage from '@repo/ui/notFoundErrorMessage'
+import ServerErrorMessage from '@repo/ui/serverErrorMessage'
 import { Spinner } from '@repo/ui/spinner'
 import TitleDescContainer from '@repo/ui/titleDescContainer'
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
@@ -19,6 +20,8 @@ export const Route = createFileRoute('/buildings/')({
 function BuildingsManagementPage() {
   const navigate = useNavigate()
   const { buildings, isLoading, listError } = useBuildings()
+
+  // console.log(buildings?.length)
 
   return (
     <div className="xtrw">
@@ -40,12 +43,12 @@ function BuildingsManagementPage() {
         </div>
       </CardContainer>
       {isLoading && <div className='flex items-center justify-center'><Spinner className='size-16' /></div>}
-      {!isLoading && buildings?.data && <div className="grid gap-6">
-        {buildings?.data?.map((building) => (
+      {!isLoading && buildings && <div className="grid gap-6">
+        {buildings?.map((building) => (
           <BuildingCard key={building.id} building={building} />
         ))}
       </div>}
-      {!isLoading && buildings?.data?.length === 0 && (
+      {!isLoading && buildings?.length === 0 && (
         <NotFoundErrorMessage
           title={"No Buildings Found"}
           desc="It looks like there are no buildings in the system yet. Click the button below to add your first building."
@@ -54,6 +57,11 @@ function BuildingsManagementPage() {
         />
       )
       }
+      {listError && (
+        <div className="flex items-center justify-center h-200">
+          <ServerErrorMessage title="Something went wrong" desc="Please try again later." />
+        </div>
+      )}
     </div>
   )
 }

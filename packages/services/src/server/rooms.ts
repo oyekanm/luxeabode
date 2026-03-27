@@ -1,21 +1,19 @@
 import {
   and,
+  Apartment,
   apartmentImages,
   apartments,
+  buildings,
   type Db,
-  eq,
   desc,
-  roomImages,
-  Room,
-  gt,
-  rooms,
-  lt,
+  eq,
   inArray,
+  lt,
 } from "@repo/db";
-import { NotFoundError } from "./errors";
+import { buildRoomPaginatedResult } from "../build-paginated-result";
+import { NotFoundError } from "../errors";
+import type { GetRoomsFilters, PaginatedResult, R2BucketLike } from "../types";
 import { createStorageService } from "./storage";
-import type { GetRoomsFilters, PaginatedResult, R2BucketLike } from "./types";
-import { buildRoomPaginatedResult } from "./build-paginated-result";
 
 //TODO: add cache to the service and rate limiting
 
@@ -23,7 +21,7 @@ export class RoomsService {
   static async getAll(
     db: Db,
     filters?: GetRoomsFilters,
-  ): Promise<PaginatedResult<Room>> {
+  ): Promise<PaginatedResult<Apartment>> {
     const limit = filters?.limit ?? 15;
     const cursor = filters?.cursor;
     const published = filters?.isPublished ?? true;
@@ -34,32 +32,32 @@ export class RoomsService {
     if (hasLocationFilter) {
       return getRoomsWithLocationFilter(db, limit, cursor, filters);
     }
-    const rows = await db.query.rooms.findMany({
+    const rows = await db.query.apartments.findMany({
       where: and(
         // published ? eq(rooms.isPublished, published) : undefined,
-        cursor ? lt(rooms.id, cursor) : undefined,
+        cursor ? lt(apartments.id, cursor) : undefined,
       ),
       with: {
         images: true,
-        apartment: {
+        building: {
           columns: {
             name: true,
           },
         },
       },
-      orderBy: desc(rooms.id),
+      orderBy: desc(apartments.id),
       limit: limit + 1,
     });
 
     return buildRoomPaginatedResult(rows, limit, cursor, db, filters);
   }
   static async getBySlug(db: Db, slug: string) {
-    return db.query.rooms.findFirst({
+    return db.query.apartments.findFirst({
       where: eq(apartments.slug, slug),
       with: {
         images: true,
         pricingRules: true,
-        apartment: true,
+        building: true,
       },
     });
   }
@@ -69,8 +67,8 @@ export class RoomsService {
     r2: R2BucketLike,
     r2BaseUrl: string,
   ) {
-    const image = await db.query.roomImages.findFirst({
-      where: eq(roomImages.key, imagekey),
+    const image = await db.query.apartmentImages.findFirst({
+      where: eq(apartmentImages.key, imagekey),
     });
 
     if (!image) throw new NotFoundError(`Image ${imagekey}`);
@@ -80,7 +78,7 @@ export class RoomsService {
     // delete from R2 first, then from DB
     // if R2 delete fails the DB record stays intact (safer than the reverse)
     await storage.delete(image.key);
-    await db.delete(roomImages).where(eq(roomImages.key, imagekey));
+    await db.delete(apartmentImages).where(eq(apartmentImages.key, imagekey));
   }
 }
 
@@ -89,19 +87,19 @@ const getRoomsWithLocationFilter = async (
   limit: number,
   cursor?: string,
   filters?: GetRoomsFilters,
-): Promise<PaginatedResult<Room>> => {
+): Promise<PaginatedResult<Apartment>> => {
   // get buildings that beong to the location filters
-  const buildings = await db.query.apartments.findMany({
+  const buildingsAvail = await db.query.buildings.findMany({
     where: and(
-      filters?.city ? eq(apartments.city, filters.city) : undefined,
-      filters?.state ? eq(apartments.state, filters.state) : undefined,
+      filters?.city ? eq(buildings.city, filters.city) : undefined,
+      filters?.state ? eq(buildings.state, filters.state) : undefined,
     ),
     columns: {
       id: true,
     },
   });
 
-  if (buildings.length === 0)
+  if (buildingsAvail.length === 0)
     return {
       data: [],
       nextCursor: null,
@@ -109,21 +107,21 @@ const getRoomsWithLocationFilter = async (
       prevCursor: null,
     };
 
-  const allIds = buildings.map((b) => b.id);
-  const rows = await db.query.rooms.findMany({
+  const allIds = buildingsAvail.map((b) => b.id);
+  const rows = await db.query.apartments.findMany({
     where: and(
-      cursor ? lt(rooms.id, cursor) : undefined,
-      inArray(rooms.apartmentId, allIds),
+      cursor ? lt(apartments.id, cursor) : undefined,
+      inArray(apartments.id, allIds),
     ),
     with: {
       images: true,
-      apartment: {
+      building: {
         columns: {
           name: true,
         },
       },
     },
-    orderBy: desc(rooms.id),
+    orderBy: desc(apartments.id),
     limit: limit + 1,
   });
 

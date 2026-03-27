@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import { Room } from "@repo/db";
+import { Apartment } from "@repo/db";
 import { PaginatedResult } from "@repo/services/types";
 
 export class RoomsClientService {
@@ -11,11 +11,11 @@ export class RoomsClientService {
     if (filters.maxPrice) query.set("maxPrice", filters.maxPrice.toString());
     if (filters.minPrice) query.set("minPrice", filters.minPrice.toString());
 
-    return apiClient.get<PaginatedResult<Room>>(
+    return apiClient.get<PaginatedResult<Apartment>>(
       `/apartments?${query.toString()}`,
     );
   }
   static async getOne(slug: string) {
-    return apiClient.get<Room>(`/apartments/${slug}`);
+    return apiClient.get<Apartment>(`/apartments/${slug}`);
   }
 }

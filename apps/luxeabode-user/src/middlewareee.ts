@@ -1,9 +1,9 @@
 // apps/user-app/src/middleware.ts
 import { NextRequest, NextResponse } from "next/server";
-import { betterFetch } from "@better-fetch/fetch";
+// import { betterFetch } from "@better-fetch/fetch";
 
 // routes that don't need auth
-const PUBLIC_ROUTES = [
+const PUBLIC_ROUTES = new Set([
   "/",
   "/apartments",
   "/login",
@@ -11,15 +11,13 @@ const PUBLIC_ROUTES = [
   "/api/auth", // better-auth's own routes
   "/api/apartments", // public listing API
   "/api/rooms", // public listing API
-];
+]);
 
 // routes that are only for guests (redirect to dashboard if logged in)
 const GUEST_ONLY_ROUTES = ["/login", "/register"];
 
 function isPublicRoute(pathname: string): boolean {
-  return PUBLIC_ROUTES.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`),
-  );
+  return PUBLIC_ROUTES.has(pathname);
 }
 
 function isGuestOnlyRoute(pathname: string): boolean {

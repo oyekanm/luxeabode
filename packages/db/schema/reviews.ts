@@ -2,8 +2,8 @@ import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
 import { users } from "./users";
 import { bookings } from "./bookings";
-import { rooms } from "./rooms";
-import { apartments } from "./apartments";
+import { apartments } from "./rooms";
+import { buildings } from "./apartments";
 
 export const reviews = sqliteTable("reviews", {
   id: text("id")
@@ -16,8 +16,8 @@ export const reviews = sqliteTable("reviews", {
     .notNull()
     .references(() => users.id),
   // review targets one or the other
-  roomId: text("room_id").references(() => rooms.id),
   apartmentId: text("apartment_id").references(() => apartments.id),
+  buildingId: text("building_id").references(() => buildings.id),
   // ratings 1-5 across multiple dimensions
   overallRating: integer("overall_rating").notNull(), // 1-5
   cleanlinessRating: integer("cleanliness_rating"),

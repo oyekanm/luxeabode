@@ -1,25 +1,30 @@
 "use client"
 
+import DateRangeComponent from '@/components/dateRange'
 import { Separator } from '@/components/ui/separator'
-import { Room } from '@repo/db'
+import { useBookingFilters } from '@/hooks/use-booking-filters'
+import { Apartment } from '@repo/db'
 import formatNairaCurrency from '@repo/helpers/formatNairaCurrency'
 import CardContainer from '@repo/ui/cardContainer'
 import FunctionalButton from '@repo/ui/functionalButton'
 import InputText from '@repo/ui/inputText'
 import { ShieldCheck } from 'lucide-react'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import React, { useMemo, useState } from 'react'
 
 interface Props {
-    apartment: Room
+    apartment: Apartment
 }
 
 export default function ApartmentDetailBookingSidebar({ apartment }: Props) {
-    const [guests, setGuests] = useState<number>(1)
+    const router = useRouter()
+    const { clearDates, updateUrl, filters, setFilter, totalDays, totalCost } = useBookingFilters(apartment)
+    const [guests, setGuests] = useState<number>(Number(filters.guest) || 1)
     const field = {
         value: guests,
         onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
             setGuests(Number(e.target.value))
+            setFilter("guest", e.target.value)
         }
     }
 
@@ -38,6 +43,14 @@ export default function ApartmentDetailBookingSidebar({ apartment }: Props) {
         return guests > 0 && !isGuestError
     }, [guests, isGuestError])
 
+    const hrefCall = () => {
+        router.push(`/apartments/${apartment.id}/book`)
+    }
+
+    const subCost = totalCost(apartment.nightlyRate)
+    const serviceFee = 500
+
+
     return (
         <div className="lg:col-span-1">
             <CardContainer className="sticky top-24 p-8 border-border shadow-xl rounded-2xl space-y-16">
@@ -52,16 +65,7 @@ export default function ApartmentDetailBookingSidebar({ apartment }: Props) {
                     </div>
                 </div>
 
-                {/* <div className="grid grid-cols-2 gap-2">
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold uppercase text-muted-foreground">Check In</label>
-                      <Input type="date" className="h-12" />
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold uppercase text-muted-foreground">Check Out</label>
-                      <Input type="date" className="h-12" />
-                    </div>
-                  </div> */}
+                <DateRangeComponent setDates={updateUrl} clearDates={clearDates} filters={filters} />
 
                 <div className="space-y-1">
                     <label className="text-base font-medium text-neutral-700">Guests</label>
@@ -72,16 +76,16 @@ export default function ApartmentDetailBookingSidebar({ apartment }: Props) {
 
 
 
-                <FunctionalButton disable={isReserved} className="w-full text-lg font-bold" asChild>
-                    <Link href={`/apartments/${apartment.id}/book`}>Reserve Now</Link>
+                <FunctionalButton click={hrefCall} disable={isReserved} className="w-full text-lg font-bold" >
+                    Reserve Now
                 </FunctionalButton>
 
                 <p className="text-center text-sm text-neutral-500">You won't be charged yet</p>
 
-                <div className="pt-8 border-t border-border space-y-4">
+                {totalDays ? <div className="pt-8 border-t border-border space-y-4">
                     <div className="flex justify-between text-base">
-                        <span className="text-muted-foreground">{formatNairaCurrency(apartment.nightlyRate)} x 5 nights</span>
-                        <span className="font-medium">{formatNairaCurrency(apartment.nightlyRate * 5)}</span>
+                        <span className="text-muted-foreground">{formatNairaCurrency(apartment.nightlyRate)} x {totalDays} nights</span>
+                        <span className="font-medium">{formatNairaCurrency(subCost)}</span>
                     </div>
                     {/* <div className="flex justify-between text-sm">
                     <span className="text-muted-foreground">Cleaning fee</span>
@@ -89,14 +93,14 @@ export default function ApartmentDetailBookingSidebar({ apartment }: Props) {
                   </div> */}
                     <div className="flex justify-between text-base">
                         <span className="text-muted-foreground">Service fee</span>
-                        <span className="font-medium">{formatNairaCurrency(500)}</span>
+                        <span className="font-medium">{formatNairaCurrency(serviceFee)}</span>
                     </div>
                     <Separator className="my-4" />
                     <div className="flex justify-between text-lg font-bold">
                         <span>Total</span>
-                        <span className="text-primary">{formatNairaCurrency(apartment.nightlyRate * 5 + 500)}</span>
+                        <span className="text-primary">{formatNairaCurrency(subCost + serviceFee)}</span>
                     </div>
-                </div>
+                </div> : ""}
             </CardContainer>
         </div>
     )

@@ -1,7 +1,7 @@
-import { Room } from '@repo/db'
+import { Apartment } from '@repo/db'
 import CardContainer from '@repo/ui/cardContainer'
 import FunctionalButton from '@repo/ui/functionalButton'
-import { Bed, Sofa, Square, Users } from 'lucide-react'
+import { Bed, Sofa, Users } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { ReactElement } from 'react'
@@ -9,7 +9,7 @@ import { ReactElement } from 'react'
 import formatNairaCurrency from '@repo/helpers/formatNairaCurrency'
 
 interface RoomCardProps {
-    room: Room
+    room: Apartment
 }
 
 export default function RoomCard({ room }: RoomCardProps) {

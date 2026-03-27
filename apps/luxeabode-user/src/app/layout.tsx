@@ -4,6 +4,7 @@ import "./globals.css";
 import { Navigation } from "@/components/layouts/navigation";
 import { Footer } from "@/components/layouts/footer";
 import QueryClientProviders from "@/components/providers/queryClientProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,7 +35,6 @@ export default function RootLayout({
           <Navigation />
           {children}
           <Footer />
-          {/* <Toaster duration={5000} position="top-right" /> */}
         </QueryClientProviders>
       </body>
     </html>

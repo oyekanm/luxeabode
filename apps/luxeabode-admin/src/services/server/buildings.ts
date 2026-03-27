@@ -1,11 +1,11 @@
 import { slugify } from '@/lib/slugify'
 import type { CreateApartmentInput } from '@/lib/validators/building'
 import type { Db } from '@repo/db/client'
-import { apartmentImages, apartments } from '@repo/db/schema'
+import { buildingImages, buildings } from '@repo/db/schema'
 import { createId } from '@paralleldrive/cuid2'
 import { eq } from '@repo/db'
 import { NotFoundError } from '@repo/services/errors'
-import { createStorageService } from '@repo/services/storage'
+import { createStorageService } from '@repo/services/server/storage'
 
 export class BuildingsServerService {
   static async create(input: CreateApartmentInput, db: Db) {
@@ -27,7 +27,7 @@ export class BuildingsServerService {
 
     const imagesArray = (id: string) => {
       return images.map((image) => ({
-        apartmentId: id,
+        buildingId: id,
         key: image.key,
         url: image.url,
         altText: image.url,
@@ -36,7 +36,7 @@ export class BuildingsServerService {
 
     // run a db transaction to create apartment and image
     await db.batch([
-      db.insert(apartments).values({
+      db.insert(buildings).values({
         address: address,
         city: city,
         state: state,
@@ -52,7 +52,7 @@ export class BuildingsServerService {
         id,
       }),
 
-      db.insert(apartmentImages).values(imagesArray(id)),
+      db.insert(buildingImages).values(imagesArray(id)),
     ])
   }
   static async update(
@@ -66,20 +66,20 @@ export class BuildingsServerService {
     const newSlug = slugify(input.name)
 
     // check if apartment with same slug exists
-    const apartment = await db.query.apartments.findFirst({
-      where: eq(apartments.slug, slug),
+    const building = await db.query.buildings.findFirst({
+      where: eq(buildings.slug, slug),
       with: { images: true },
     })
 
     // throw notfound error if it doesnt exist
-    if (!apartment) throw new NotFoundError(`Building ${slug}`)
+    if (!building) throw new NotFoundError(`Building ${slug}`)
 
-    const isNewImages = images.length > apartment.images.length
+    const isNewImages = images.length > building.images.length
 
     // delete existing images for this apartment only if a new image is added
     if (images && isNewImages) {
       // delete old images from R2
-      const oldKeys = apartment.images.map((img) => img.key)
+      const oldKeys = building.images.map((img) => img.key)
       if (oldKeys.length > 0) {
         const storage = createStorageService(r2, r2BaseUrl)
         await storage.deleteMany(oldKeys)
@@ -87,13 +87,13 @@ export class BuildingsServerService {
 
       // delete old image records from DB
       await db
-        .delete(apartmentImages)
-        .where(eq(apartmentImages.apartmentId, apartment.id))
+        .delete(buildingImages)
+        .where(eq(buildingImages.buildingId, building.id))
     }
 
     const imagesArray = (id: string) => {
       return images.map((image) => ({
-        apartmentId: id,
+        buildingId: id,
         key: image.key,
         url: image.url,
         altText: image.url,
@@ -101,7 +101,7 @@ export class BuildingsServerService {
     }
 
     const updateQuery = db
-      .update(apartments)
+      .update(buildings)
       .set({
         ...(input.name && { name: input.name }),
         ...(input.description && { description: input.description }),
@@ -117,13 +117,13 @@ export class BuildingsServerService {
         slug: newSlug,
         updatedAt: new Date(),
       })
-      .where(eq(apartments.slug, slug))
+      .where(eq(buildings.slug, slug))
 
     // run a db transaction to update apartment and image on conditions
     if (isNewImages) {
       await db.batch([
         updateQuery,
-        db.insert(apartmentImages).values(imagesArray(apartment.id)),
+        db.insert(buildingImages).values(imagesArray(building.id)),
       ])
     } else {
       db.batch([updateQuery])
@@ -131,11 +131,11 @@ export class BuildingsServerService {
   }
   static async delete(slug: string, db: Db, r2: R2Bucket, r2BaseUrl: string) {
     // fetch the building with all rooms and their images before deleting
-    const building = await db.query.apartments.findFirst({
-      where: eq(apartments.slug, slug),
+    const building = await db.query.buildings.findFirst({
+      where: eq(buildings.slug, slug),
       with: {
         images: true,
-        rooms: {
+        apartments: {
           with: {
             images: true,
           },
@@ -149,8 +149,8 @@ export class BuildingsServerService {
     //  collect all r2 keys into one flat array
     const apartmentImageKeys = building.images.map((img) => img.key)
 
-    const roomImageKeys = building.rooms.flatMap((room) =>
-      room.images.map((img) => img.key),
+    const roomImageKeys = building.apartments.flatMap((apartment) =>
+      apartment.images.map((img) => img.key),
     )
 
     const allKeys = [...apartmentImageKeys, ...roomImageKeys]
@@ -163,6 +163,6 @@ export class BuildingsServerService {
     }
 
     // delete the building — cascade handles rooms and all DB image records
-    await db.delete(apartments).where(eq(apartments.id, building.id))
+    await db.delete(buildings).where(eq(buildings.id, building.id))
   }
 }

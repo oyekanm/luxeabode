@@ -1,13 +1,14 @@
-import { GetRoomsFilters, PaginatedResult } from "./types";
-import { Db, Room, and, desc, eq, gt, lt, rooms } from "@repo/db";
+import type { Apartment, Db } from "@repo/db";
+import { and, apartments, desc, lt } from "@repo/db";
+import type { GetRoomsFilters, PaginatedResult } from "./types";
 
 export async function buildRoomPaginatedResult(
-  rows: Room[],
+  rows: Apartment[],
   limit: number,
   cursor: string | undefined,
   db: Db,
   filters?: GetRoomsFilters,
-): Promise<PaginatedResult<Room>> {
+): Promise<PaginatedResult<Apartment>> {
   const hasMore = rows.length > limit;
   const data = hasMore ? rows.slice(0, limit) : rows;
 
@@ -19,15 +20,15 @@ export async function buildRoomPaginatedResult(
 
     console.log(firstItem.id, cursor, "testing cursor");
 
-    const prevRow = await db.query.rooms.findFirst({
+    const prevRow = await db.query.apartments.findFirst({
       where: and(
-        lt(rooms.id, firstItem.id),
+        lt(apartments.id, firstItem.id),
         // TODO:isactive filter
         // filters?.isPublished !== undefined
         //   ? eq(rooms.isActive, filters.isPublished)
         //   : undefined,
       ),
-      orderBy: desc(rooms.id),
+      orderBy: desc(apartments.id),
       columns: { id: true },
     });
 

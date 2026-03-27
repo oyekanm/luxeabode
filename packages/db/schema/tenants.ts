@@ -36,13 +36,16 @@ export const tenantMembers = sqliteTable("tenant_members", {
     .notNull()
     .references(() => tenants.id, { onDelete: "cascade" }),
   userId: text("user_id").notNull(),
+
+  // role:  admins
   role: text("role", {
-    enum: ["owner", "admin", "manager", "viewer"],
+    enum: ["user", "admin", "super_admin", "owner", "manager", "viewer"],
   })
     .notNull()
     .default("admin"),
+  // admin-specific
   permissions: text("permissions", { mode: "json" })
-    .$type<string[]>()
+    .$type<AdminPermission[]>()
     .default([]),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(
     () => new Date(),
@@ -53,3 +56,13 @@ export const tenantMembers = sqliteTable("tenant_members", {
 
 //  tenantId: text('tenant_id').notNull()
 //     .references(() => tenants.id, { onDelete: 'cascade' }),
+
+// Fine-grained admin permissions
+export type AdminPermission =
+  | "manage_apartments"
+  | "manage_rooms"
+  | "manage_bookings"
+  | "manage_users"
+  | "manage_payments"
+  | "manage_reviews"
+  | "view_reports";

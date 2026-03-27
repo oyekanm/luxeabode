@@ -1,14 +1,14 @@
 import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
-import { apartments, type Apartment } from "./apartments";
+import { type Building, buildings } from "./apartments";
 
-export const rooms = sqliteTable("rooms", {
+export const apartments = sqliteTable("apartments", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => createId()),
-  apartmentId: text("apartment_id")
+  buildingId: text("building_id")
     .notNull()
-    .references(() => apartments.id, { onDelete: "cascade" }),
+    .references(() => buildings.id, { onDelete: "cascade" }),
   slug: text("slug").notNull().unique(),
   name: text("name").notNull(), // e.g. "Deluxe Suite", "Room 3A"
   description: text("description").notNull(),
@@ -52,13 +52,13 @@ export const rooms = sqliteTable("rooms", {
   ),
 });
 
-export const roomImages = sqliteTable("room_images", {
+export const apartmentImages = sqliteTable("apartment_images", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => createId()),
-  roomId: text("room_id")
+  apartmentId: text("apartment_id")
     .notNull()
-    .references(() => rooms.id, { onDelete: "cascade" }),
+    .references(() => apartments.id, { onDelete: "cascade" }),
   key: text("key").notNull(),
   url: text("url").notNull(),
   altText: text("alt_text"),
@@ -69,13 +69,13 @@ export const roomImages = sqliteTable("room_images", {
 });
 
 // Seasonal or special pricing overrides
-export const roomPricingRules = sqliteTable("room_pricing_rules", {
+export const apartmentPricingRules = sqliteTable("apartment_pricing_rules", {
   id: text("id")
     .primaryKey()
     .$defaultFn(() => createId()),
-  roomId: text("room_id")
+  apartmentId: text("apartment_id")
     .notNull()
-    .references(() => rooms.id, { onDelete: "cascade" }),
+    .references(() => apartments.id, { onDelete: "cascade" }),
   name: text("name").notNull(), // e.g. "Christmas Holiday"
   nightlyRate: real("nightly_rate"),
   monthlyRate: real("monthly_rate"),
@@ -87,8 +87,8 @@ export const roomPricingRules = sqliteTable("room_pricing_rules", {
   ),
 });
 
-export type Room = typeof rooms.$inferSelect & {
-  images: RoomImage[];
-  apartment?: Partial<Apartment>;
+export type Apartment = typeof apartments.$inferSelect & {
+  images: ApartmentImage[];
+  buildings?: Partial<Building>;
 };
-export type RoomImage = typeof roomImages.$inferSelect;
+export type ApartmentImage = typeof apartmentImages.$inferSelect;

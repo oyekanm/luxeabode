@@ -1,14 +1,13 @@
 import { relations } from "drizzle-orm";
-import { apartments } from "../schema/apartments";
 import { bookings } from "../schema/bookings";
 import { notifications } from "../schema/notifications";
 import { reviews } from "../schema/reviews";
-import { rooms } from "../schema/rooms";
-import { oauthAccounts, sessions, users } from "../schema/users";
+import { accounts, sessions, users } from "../schema/users";
+import { apartments, buildings } from "../schema";
 
 const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
-  oauthAccounts: many(oauthAccounts),
+  accounts: many(accounts),
   bookings: many(bookings),
   reviews: many(reviews),
   notifications: many(notifications),
@@ -21,9 +20,9 @@ const sessionsRelations = relations(sessions, ({ one }) => ({
   }),
 }));
 
-const oauthAccountsRelations = relations(oauthAccounts, ({ one }) => ({
+const accountsRelations = relations(accounts, ({ one }) => ({
   user: one(users, {
-    fields: [oauthAccounts.userId],
+    fields: [accounts.userId],
     references: [users.id],
   }),
 }));
@@ -34,10 +33,13 @@ const reviewsRelations = relations(reviews, ({ one }) => ({
     fields: [reviews.bookingId],
     references: [bookings.id],
   }),
-  room: one(rooms, { fields: [reviews.roomId], references: [rooms.id] }),
   apartment: one(apartments, {
     fields: [reviews.apartmentId],
     references: [apartments.id],
+  }),
+  building: one(buildings, {
+    fields: [reviews.buildingId],
+    references: [buildings.id],
   }),
 }));
 
@@ -50,8 +52,8 @@ const notificationsRelations = relations(notifications, ({ one }) => ({
 }));
 
 export {
+  accountsRelations,
   notificationsRelations,
-  oauthAccountsRelations,
   reviewsRelations,
   sessionsRelations,
   usersRelations,

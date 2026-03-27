@@ -1,9 +1,9 @@
 import { slugify } from '@/lib/slugify'
 import type { CreateRoomInput } from '@/lib/validators/room'
 import { createId } from '@paralleldrive/cuid2'
-import { eq, roomImages, rooms, type Db } from '@repo/db'
+import { apartmentImages, apartments, eq, type Db } from '@repo/db'
 import { NotFoundError } from '@repo/services/errors'
-import { createStorageService } from '@repo/services/storage'
+import { createStorageService } from '@repo/services/server/storage'
 
 export class RoomsServerService {
   static async create(input: CreateRoomInput, db: Db) {
@@ -11,7 +11,7 @@ export class RoomsServerService {
     const {
       name,
       amenities,
-      apartmentId,
+      buildingId,
       rules,
       description,
       images,
@@ -28,7 +28,7 @@ export class RoomsServerService {
 
     const imagesArray = (id: string) => {
       return images.map((image) => ({
-        roomId: id,
+        apartmentId: id,
         key: image.key,
         url: image.url,
         altText: image.url,
@@ -37,7 +37,7 @@ export class RoomsServerService {
 
     // run a db transaction to create apartment and image
     await db.batch([
-      db.insert(rooms).values({
+      db.insert(apartments).values({
         rules,
         name,
         description,
@@ -52,10 +52,10 @@ export class RoomsServerService {
         type,
         monthlyRate,
         amenities,
-        apartmentId,
+        buildingId,
       }),
 
-      db.insert(roomImages).values(imagesArray(id)),
+      db.insert(apartmentImages).values(imagesArray(id)),
     ])
   }
   static async update(
@@ -69,8 +69,8 @@ export class RoomsServerService {
     const newSlug = slugify(input.name)
 
     // check if apartment with same slug exists
-    const room = await db.query.rooms.findFirst({
-      where: eq(rooms.slug, slug),
+    const room = await db.query.apartments.findFirst({
+      where: eq(apartments.slug, slug),
       with: { images: true },
     })
 
@@ -89,12 +89,14 @@ export class RoomsServerService {
       }
 
       // delete old image records from DB
-      await db.delete(roomImages).where(eq(roomImages.roomId, room.id))
+      await db
+        .delete(apartmentImages)
+        .where(eq(apartmentImages.apartmentId, room.id))
     }
 
     const imagesArray = (id: string) => {
       return images.map((image) => ({
-        roomId: id,
+        apartmentId: id,
         key: image.key,
         url: image.url,
         altText: image.url,
@@ -102,7 +104,7 @@ export class RoomsServerService {
     }
 
     const updateQuery = db
-      .update(rooms)
+      .update(apartments)
       .set({
         ...(input.name && { name: input.name }),
         ...(input.description && { description: input.description }),
@@ -123,15 +125,15 @@ export class RoomsServerService {
         ...(input.rules && { rules: input.rules }),
         slug: newSlug,
         updatedAt: new Date(),
-        apartmentId: room.apartmentId,
+        buildingId: room.buildingId,
       })
-      .where(eq(rooms.slug, slug))
+      .where(eq(apartments.slug, slug))
 
     // run a db transaction to update apartment and image on conditions
     if (isNewImages) {
       await db.batch([
         updateQuery,
-        db.insert(roomImages).values(imagesArray(room.id)),
+        db.insert(apartmentImages).values(imagesArray(room.id)),
       ])
     } else {
       db.batch([updateQuery])
@@ -139,8 +141,8 @@ export class RoomsServerService {
   }
   static async delete(slug: string, db: Db, r2: R2Bucket, r2BaseUrl: string) {
     // fetch the building with all rooms and their images before deleting
-    const building = await db.query.rooms.findFirst({
-      where: eq(rooms.slug, slug),
+    const building = await db.query.apartments.findFirst({
+      where: eq(apartments.slug, slug),
       with: {
         images: true,
       },
@@ -162,6 +164,6 @@ export class RoomsServerService {
     }
 
     // delete the building — cascade handles rooms and all DB image records
-    await db.delete(rooms).where(eq(rooms.id, building.id))
+    await db.delete(apartments).where(eq(apartments.id, building.id))
   }
 }

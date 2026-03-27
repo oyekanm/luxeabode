@@ -1,5 +1,5 @@
 import { buildingFiltersSchema } from "@/lib/validators/filtersSchema";
-import { BuildingsService } from "@repo/services/buildings";
+import { BuildingsService } from "@repo/services/server/buildings";
 import { ValidationError } from "@repo/services/errors";
 import { handleError } from "@repo/services/handle-error";
 import { NextRequest, NextResponse } from "next/server";
@@ -36,6 +36,7 @@ export async function GET(request: NextRequest) {
       data: result,
     });
   } catch (error) {
+    console.log(error);
     return handleError(error);
   }
 }

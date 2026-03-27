@@ -2,6 +2,7 @@ import RoomCard from '@/features/rooms/components/roomCard'
 import { useRooms } from '@/features/rooms/hooks/useRooms'
 import FunctionalButton from '@repo/ui/functionalButton'
 import NotFoundErrorMessage from '@repo/ui/notFoundErrorMessage'
+import ServerErrorMessage from '@repo/ui/serverErrorMessage'
 import { Spinner } from '@repo/ui/spinner'
 import TitleDescContainer from '@repo/ui/titleDescContainer'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
@@ -49,42 +50,13 @@ function RouteComponent() {
                 />
             )
             }
+            {listError && (
+                <div className="flex items-center justify-center h-200">
+                    <ServerErrorMessage title="Something went wrong" desc="Please try again later." />
+                </div>
+            )}
         </div>
     )
 }
 
-const ROOMS = [
-    {
-        id: "1",
-        name: "Executive Skyline Suite",
-        building: "Skyline Residency", // added building association
-        type: "Suite",
-        status: "Available",
-        price: 250,
-        guests: 4,
-        beds: 2,
-        image: "/luxury-living-room.png",
-    },
-    {
-        id: "2",
-        name: "Urban Garden Loft",
-        building: "Garden View Apartments", // added building association
-        type: "Loft",
-        status: "Occupied",
-        price: 180,
-        guests: 2,
-        beds: 1,
-        image: "/modern-apartment-garden-loft.jpg",
-    },
-    {
-        id: "3",
-        name: "Serene Riverview Penthouse",
-        building: "River View Penthouse", // added building association
-        type: "Penthouse",
-        status: "Available",
-        price: 450,
-        guests: 6,
-        beds: 3,
-        image: "/luxury-penthouse-river-view.jpg",
-    },
-]
+

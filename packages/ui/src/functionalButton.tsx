@@ -41,7 +41,7 @@ export default function FunctionalButton({
       type={type}
       disabled={disable}
       className={cn(
-        `cursor-pointer font-semibold text-base w-fit h-[4.8rem] radius-[.8rem] p-[1.6rem] px-[2.4rem]   ${disable ? "bg-[#EFEFEB]" : "text-primary"
+        `cursor-pointer font-semibold text-base w-fit h-[4.8rem] radius-[.8rem] p-[1.6rem] px-[2.4rem]   ${disable ? "bg-[#EFEFEB] text-primary" : ""
         }`,
         className,
       )}

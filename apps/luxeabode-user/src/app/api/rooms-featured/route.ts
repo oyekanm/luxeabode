@@ -9,7 +9,17 @@ export async function GET() {
     const { env } = getCloudflareContext();
     const db = getDb(env.DB);
 
-    const result = await db.select().from(rooms);
+    // TODO: add implementation for featured rooms (highest rating, paid featuring etc)
+    const result = await db.query.rooms.findMany({
+      with: {
+        images: true,
+        apartment: {
+          columns: {
+            name: true,
+          },
+        },
+      },
+    });
     return NextResponse.json({
       success: true,
       data: result,

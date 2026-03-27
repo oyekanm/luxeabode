@@ -3,8 +3,8 @@ import { apartmentFiltersSchema } from "@/lib/validators/filtersSchema";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
 import { ValidationError } from "@repo/services/errors";
 import { handleError } from "@repo/services/handle-error";
-import { RoomsService } from "@repo/services/rooms";
 import { NextResponse } from "next/server";
+import { RoomsService } from "@repo/services/server/rooms";
 
 export async function GET(request: Request) {
   try {

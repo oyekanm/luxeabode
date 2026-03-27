@@ -1,5 +1,5 @@
 import { apiClient } from "@/lib/api-client";
-import type { Apartment } from "@repo/db";
+import type { Building } from "@repo/db";
 import { PaginatedResult } from "@repo/services/types";
 
 interface Filters {
@@ -16,12 +16,12 @@ export class BuildingsClientService {
     if (filters?.city) params.set("city", filters.city);
     if (filters?.state) params.set("state", filters.state);
     if (filters?.limit) params.set("limit", filters.limit.toString());
-    return apiClient.get<PaginatedResult<Apartment>>(
+    return apiClient.get<PaginatedResult<Building>>(
       `/buildings?${params.toString()}`,
     );
   }
 
   static async getOne(slug: string) {
-    return apiClient.get<Apartment>(`/buildings/${slug}`);
+    return apiClient.get<Building>(`/buildings/${slug}`);
   }
 }
