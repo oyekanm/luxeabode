@@ -30,8 +30,6 @@ export class ApiClient {
 
     const json: ApiResponse<T> = await response.json();
 
-    // console.log(json, response.ok, "json");
-
     // throw when server returns error
     if (!response.ok || !json.success) {
       const error = new ApiError(

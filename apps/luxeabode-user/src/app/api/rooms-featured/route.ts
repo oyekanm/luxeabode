@@ -1,6 +1,5 @@
 import { getDb } from "@/lib/db";
 import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { rooms } from "@repo/db";
 import { handleError } from "@repo/services/handle-error";
 import { NextResponse } from "next/server";
 
@@ -10,10 +9,10 @@ export async function GET() {
     const db = getDb(env.DB);
 
     // TODO: add implementation for featured rooms (highest rating, paid featuring etc)
-    const result = await db.query.rooms.findMany({
+    const result = await db.query.apartments.findMany({
       with: {
         images: true,
-        apartment: {
+        building: {
           columns: {
             name: true,
           },

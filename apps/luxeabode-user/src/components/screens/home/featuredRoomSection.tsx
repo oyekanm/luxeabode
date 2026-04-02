@@ -1,16 +1,19 @@
 import { apiClient } from '@/lib/api-client'
-import { Room } from '@repo/db'
 import { getClientError } from '@repo/helpers/getClientError'
 import NotFoundErrorMessage from '@repo/ui/notFoundErrorMessage'
 import TitleDescContainer from '@repo/ui/titleDescContainer'
 import RoomCard from '../building-room/roomCard'
+import { Apartment } from '@repo/db'
 
 export default async function FeaturedRoomSection() {
   try {
-    const resp = await apiClient.get<Room[]>('/rooms-featured')
+    const resp = await apiClient.get<Apartment[]>('/rooms-featured')
 
 
     if (resp.data?.length === 0) return null
+
+
+    console.log(resp)
 
     return (
       <section>

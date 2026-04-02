@@ -43,9 +43,9 @@ export async function signUpAction(
 }
 
 export async function signOutAction() {
-  await auth.api.signOut({
+  const resp = await auth.api.signOut({
     headers: await headers(),
   });
 
-  redirect("/");
+  return resp;
 }

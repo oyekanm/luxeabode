@@ -1,58 +1,23 @@
 // apps/user-app/src/app/api/account/me/route.ts
-import { getCloudflareContext } from "@opennextjs/cloudflare";
-import { requireSession } from "@/lib/get-session";
-import { createDb } from "@repo/db";
+import { auth } from "@/lib/auth";
+import { NotFoundError } from "@repo/services/errors";
 import { handleError } from "@repo/services/handle-error";
-import { UnauthorizedError } from "@repo/services/errors";
-
-const CACHE_TTL = 60 * 60; // 1 hour — matches cookie cache
+import { headers } from "next/headers";
 
 export async function GET() {
   try {
-    const session = await requireSession();
-    const { env } = await getCloudflareContext();
+    const user = await auth.api.getSession({
+      headers: await headers(),
+    });
 
-    const cacheKey = `user:${session.user.id}`;
+    if (!user?.user) throw new NotFoundError("User");
 
-    // check KV first
-    const cached = (await env.KV.get(cacheKey, "json")) as UserProfile | null;
-
-    if (cached) {
-      return Response.json(cached, {
-        headers: {
-          // private — never cache user data at edge
-          "Cache-Control": "private, no-store",
-        },
-      });
-    }
-
-    // KV miss — fetch from DB
-    const db = createDb(env.DB);
-    const user = await db.query.users.findFirst({
-      where: eq(users.id, session.user.id),
-      columns: {
-        id: true,
-        name: true,
-        email: true,
-        phone: true,
-        isVerified: true,
-        isActive: true,
-        createdAt: true,
-        // never return hashedPassword
-        hashedPassword: false,
+    return Response.json(
+      { data: user?.user, success: true, message: "User fetched successfully" },
+      {
+        headers: { "Cache-Control": "private, no-store" },
       },
-    });
-
-    if (!user) throw new UnauthorizedError();
-
-    // write to KV for next request
-    await env.KV.put(cacheKey, JSON.stringify(user), {
-      expirationTtl: CACHE_TTL,
-    });
-
-    return Response.json(user, {
-      headers: { "Cache-Control": "private, no-store" },
-    });
+    );
   } catch (error) {
     return handleError(error);
   }

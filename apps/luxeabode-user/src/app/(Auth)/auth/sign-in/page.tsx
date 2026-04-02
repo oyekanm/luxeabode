@@ -15,11 +15,13 @@ import FunctionalButton from "@repo/ui/functionalButton"
 import InputLabel from "@repo/ui/inputLabel"
 import InputText from "@repo/ui/inputText"
 import PasswordInput from "@repo/ui/passwordInput"
+import { useQueryClient } from "@tanstack/react-query"
 import Link from "next/link"
 import { useRouter, useSearchParams } from "next/navigation"
 import { toast } from "sonner"
 
 export default function UserSignInPage() {
+    const queryClient = useQueryClient()
     const router = useRouter()
     const searchParams = useSearchParams()
     const callbackUrl = searchParams.get("callbackUrl")
@@ -42,6 +44,7 @@ export default function UserSignInPage() {
         if (result.success) {
             toast.success(result.message)
             router.push(callbackUrl || "/")
+            await queryClient.invalidateQueries({ queryKey: ['account', 'me'] })
         } else {
             toast.error(result.error)
         }

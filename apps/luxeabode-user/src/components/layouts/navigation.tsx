@@ -7,9 +7,10 @@ import { useState } from "react"
 import useAuth from "@/hooks/use-auth"
 import FunctionalButton from "@repo/ui/functionalButton"
 import LogoutBtn from "../reuseable/logoutBtn"
+import { useCurrentUser } from "@/hooks/use-current-user"
 
 export function Navigation() {
-    const { session } = useAuth()
+    const { session } = useCurrentUser()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
     console.log(session)
@@ -44,7 +45,7 @@ export function Navigation() {
                     </div>
 
                     {/* CTA Buttons */}
-                    {session.data ?
+                    {session ?
                         (
                             <div className="hidden md:flex items-center gap-3">
                                 <LogoutBtn />
