@@ -1,7 +1,7 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
 import { users } from "./users";
-import { buildings } from "./apartments";
+import { buildings } from "./buildings";
 import { apartments } from "./rooms";
 
 // Admin-created blocked dates (maintenance, private use, etc.)

@@ -10,6 +10,7 @@ const nextConfig: NextConfig = {
     "@repo/helpers",
     "@repo/services",
     "@repo/db",
+    "@repo/auth",
   ],
   images: {
     unoptimized: process.env.NODE_ENV === "development",

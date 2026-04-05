@@ -4,7 +4,7 @@ import { getSessionCookie } from "better-auth/cookies";
 import { auth } from "./lib/auth";
 import { headers } from "next/headers";
 
-const PROTECTED_ROUTES = ["/account"];
+const PROTECTED_ROUTES = ["/account", "/become-a-host"];
 const GUEST_ONLY_ROUTES = ["/login", "/register"];
 
 export async function proxy(request: NextRequest) {
@@ -22,8 +22,8 @@ export async function proxy(request: NextRequest) {
   // read the auth cookie — just check existence, not validity
   // actual validation happens at the route/server component level
   if (isProtected && !sessionCookie) {
-    const url = new URL("/login", request.url);
-    url.searchParams.set("redirect", pathname);
+    const url = new URL("/auth/sign-in", request.url);
+    url.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(url);
   }
 

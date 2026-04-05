@@ -20,12 +20,12 @@ export const createRoomSchema = z.object({
   bookingMode: z
     .enum(['room_only', 'apartment_only', 'both'])
     .default('room_only'),
-  maxGuests: z.coerce.number().min(1, 'Max guests is required'),
-  bedrooms: z.coerce.number().min(1, 'Bedrooms is required'),
-  bathrooms: z.coerce.number().min(1, 'Bathrooms is required'),
+  maxGuests: z.coerce.number<number>().min(1, 'Max guests is required'),
+  bedrooms: z.coerce.number<number>().min(1, 'Bedrooms is required'),
+  bathrooms: z.coerce.number<number>().min(1, 'Bathrooms is required'),
   hasSittingRoom: z.boolean().default(false),
-  nightlyRate: z.coerce.number().min(1, 'Nightly rate is required'),
-  monthlyRate: z.coerce.number().optional(),
+  nightlyRate: z.coerce.number<number>().min(1, 'Nightly rate is required'),
+  monthlyRate: z.coerce.number<number>().optional(),
 })
 
 export type CreateRoomInput = z.infer<typeof createRoomSchema>

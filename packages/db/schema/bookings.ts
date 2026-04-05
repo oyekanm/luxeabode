@@ -2,7 +2,7 @@ import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
 import { users } from "./users";
 import { apartments } from "./rooms";
-import { buildings } from "./apartments";
+import { buildings } from "./buildings";
 
 export const bookings = sqliteTable("bookings", {
   id: text("id")

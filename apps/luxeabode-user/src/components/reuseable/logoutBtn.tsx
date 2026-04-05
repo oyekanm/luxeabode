@@ -8,7 +8,8 @@ export default function LogoutBtn() {
 
     const handleLogout = async () => {
         await signOutAction()
-        await queryClient.invalidateQueries({ queryKey: ['account', 'me'] })
+        // await queryClient.invalidateQueries({ queryKey: ['account', 'me'] })
+        await queryClient.removeQueries({ queryKey: ['account'] })
     }
     return (
         <form action={handleLogout}>

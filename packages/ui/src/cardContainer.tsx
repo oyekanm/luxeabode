@@ -19,7 +19,7 @@ export default function CardContainer({
   return (
     <div
       className={cn(
-        "bg-white border border-[#E5E5E5] rounded-4xl p-8 w-full",
+        "bg-white border border-[#E5E5E5] rounded-4xl p-8 w-full shadow",
         className,
       )}
     >

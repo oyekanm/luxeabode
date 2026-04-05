@@ -33,7 +33,6 @@ export default async function BuildingsListingPage({ searchParams }: PageProps) 
             ),
     })
 
-
     return (
         <main className="flex-1">
             <section className="bg-primary text-primary-foreground relative overflow-hidden">

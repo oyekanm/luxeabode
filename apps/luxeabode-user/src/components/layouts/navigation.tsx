@@ -2,18 +2,27 @@
 
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Building2, Menu, X } from "lucide-react"
+import { Building2, LogIn, Menu, UserCircle, X } from "lucide-react"
 import { useState } from "react"
 import useAuth from "@/hooks/use-auth"
 import FunctionalButton from "@repo/ui/functionalButton"
 import LogoutBtn from "../reuseable/logoutBtn"
 import { useCurrentUser } from "@/hooks/use-current-user"
+import { useRouter } from "next/navigation"
 
 export function Navigation() {
     const { session } = useCurrentUser()
+    const router = useRouter()
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
-    console.log(session)
+
+    const becomeHost = () => {
+        if (!session) {
+            router.push("/auth/sign-in?callbackUrl=/become-a-host")
+        } else {
+            router.push("/become-a-host")
+        }
+    }
 
     return (
         <header className="sticky top-0 z-50 bg-card/95  border-b border-border">
@@ -44,25 +53,32 @@ export function Navigation() {
                         }
                     </div>
 
+
                     {/* CTA Buttons */}
-                    {session ?
-                        (
-                            <div className="hidden md:flex items-center gap-3">
-                                <LogoutBtn />
-                            </div>
-                        )
-                        :
-                        (
-                            <div className="hidden md:flex items-center gap-3">
-                                <FunctionalButton variant="ghost" asChild>
-                                    <Link className="text-primary" href="/auth/sign-in">Sign In</Link>
-                                </FunctionalButton>
-                                <FunctionalButton asChild>
-                                    <Link href="/auth/sign-up">Sign Up</Link>
-                                </FunctionalButton>
-                            </div>
-                        )
-                    }
+                    <div className="flex items-center">
+                        <FunctionalButton variant="ghost" className="hover:bg-transparent hover:underline" text="Become a Host" click={becomeHost} />
+                        {session ?
+                            (
+                                <div className="hidden md:flex items-center gap-3">
+                                    <LogoutBtn />
+                                    <span className="pl-4 cursor-pointer">
+                                        <UserCircle className="size-12!" />
+                                    </span>
+                                </div>
+                            )
+                            :
+                            (
+                                <div className="hidden md:flex items-center gap-3">
+                                    <FunctionalButton className="hover:bg-transparent" variant="ghost" asChild>
+                                        <Link className="text-primary flex items-center gap-2" href="/auth/sign-in">
+                                            Sign In
+                                            <LogIn className="icon-size" />
+                                        </Link>
+                                    </FunctionalButton>
+                                </div>
+                            )
+                        }
+                    </div>
 
                     {/* Mobile Menu Button */}
                     <button

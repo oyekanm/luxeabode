@@ -17,14 +17,13 @@ export default function AddNewRoomContainer() {
             maxGuests: 1,
             bathrooms: 1,
             bedrooms: 1,
-            apartmentId: "",
-            bookingMode: "room_only" as CreateRoomInput["bookingMode"],
-            type: "single" as CreateRoomInput["type"],
+            bookingMode: "room_only",
+            type: "single",
             monthlyRate: 0,
             rules: [],
             hasSittingRoom: false,
             nightlyRate: 0,
-
+            buildingId: "",
         },
         mode: "onChange"
     })

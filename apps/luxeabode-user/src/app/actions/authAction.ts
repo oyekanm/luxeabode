@@ -36,6 +36,13 @@ export async function signUpAction(
     return { status: 201, success: true, message: "Sign up successful" };
   } catch (error) {
     if (error instanceof Error) {
+      console.log(error);
+
+      // if (error. === 422) {
+      //   // Display a generic message instead of the raw error
+      //   alert("If this email is available, a verification link has been sent.");
+      // }
+
       return { error: error.message, status: 500, success: false };
     }
     return { status: 500, success: false, error: "An error occurred" };

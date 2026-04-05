@@ -1,6 +1,8 @@
 import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
 import type { Apartment } from "./rooms";
+import { admins } from "./admins";
+import { hosts } from "./host";
 
 export const buildings = sqliteTable("buildings", {
   id: text("id")
@@ -18,6 +20,15 @@ export const buildings = sqliteTable("buildings", {
 
   // rules stored as JSON array of strings
   rules: text("rules", { mode: "json" }).$type<string[]>().default([]),
+
+  // owner detail
+  // adminId: text("admin_id")
+  //   .notNull()
+  //   .references(() => admins.id, { onDelete: "cascade" }),
+
+  hostId: text("host_id")
+    .notNull()
+    .references(() => hosts.id, { onDelete: "cascade" }),
 
   // general amenities at apartment level (wifi, parking, pool etc)
   // amenities: text("amenities", { mode: "json" }).$type<string[]>().default([]),

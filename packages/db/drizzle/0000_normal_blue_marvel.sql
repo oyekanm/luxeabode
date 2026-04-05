@@ -74,13 +74,15 @@ CREATE TABLE `buildings` (
 	`latitude` real,
 	`longitude` real,
 	`rules` text DEFAULT '[]',
+	`host_id` text NOT NULL,
 	`check_in_time` text DEFAULT '14:00' NOT NULL,
 	`check_out_time` text DEFAULT '11:00' NOT NULL,
 	`min_stay_nights` integer DEFAULT 1,
 	`is_published` integer DEFAULT false NOT NULL,
 	`is_active` integer DEFAULT true NOT NULL,
 	`created_at` integer,
-	`updated_at` integer
+	`updated_at` integer,
+	FOREIGN KEY (`host_id`) REFERENCES `hosts`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `buildings_slug_unique` ON `buildings` (`slug`);--> statement-breakpoint
@@ -121,6 +123,7 @@ CREATE TABLE `apartments` (
 	`bathrooms` real DEFAULT 1 NOT NULL,
 	`has_sitting_room` integer DEFAULT false NOT NULL,
 	`is_published` integer DEFAULT false NOT NULL,
+	`host_id` text NOT NULL,
 	`nightly_rate` real NOT NULL,
 	`monthly_rate` real,
 	`amenities` text DEFAULT '[]',
@@ -128,7 +131,8 @@ CREATE TABLE `apartments` (
 	`is_active` integer DEFAULT true NOT NULL,
 	`created_at` integer,
 	`updated_at` integer,
-	FOREIGN KEY (`building_id`) REFERENCES `buildings`(`id`) ON UPDATE no action ON DELETE cascade
+	FOREIGN KEY (`building_id`) REFERENCES `buildings`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`host_id`) REFERENCES `hosts`(`id`) ON UPDATE no action ON DELETE cascade
 );
 --> statement-breakpoint
 CREATE UNIQUE INDEX `apartments_slug_unique` ON `apartments` (`slug`);--> statement-breakpoint
@@ -308,28 +312,46 @@ CREATE TABLE `audit_logs` (
 	FOREIGN KEY (`actor_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE no action
 );
 --> statement-breakpoint
-CREATE TABLE `tenant_members` (
+CREATE TABLE `hosts` (
 	`id` text PRIMARY KEY NOT NULL,
-	`tenant_id` text NOT NULL,
-	`user_id` text NOT NULL,
-	`role` text DEFAULT 'admin' NOT NULL,
-	`permissions` text DEFAULT '[]',
+	`owner_id` text NOT NULL,
+	`business_name` text NOT NULL,
+	`phone` text NOT NULL,
+	`address` text NOT NULL,
+	`city` text NOT NULL,
+	`state` text NOT NULL,
+	`country` text DEFAULT 'Nigeria' NOT NULL,
+	`govt_id_key` text,
+	`cac_doc_key` text,
+	`bank_name` text,
+	`bank_account` text NOT NULL,
+	`bank_code` text,
+	`account_holder_name` text,
+	`commission_rate` real DEFAULT 0.1 NOT NULL,
+	`status` text DEFAULT 'pending' NOT NULL,
+	`rejection_reason` text,
+	`rejected_at` integer,
+	`rejected_name` text,
+	`approved_at` integer,
+	`approved_name` text,
 	`created_at` integer,
-	FOREIGN KEY (`tenant_id`) REFERENCES `tenants`(`id`) ON UPDATE no action ON DELETE cascade
+	`updated_at` integer,
+	FOREIGN KEY (`owner_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE restrict
 );
 --> statement-breakpoint
-CREATE TABLE `tenants` (
+CREATE UNIQUE INDEX `hosts_owner_id_unique` ON `hosts` (`owner_id`);--> statement-breakpoint
+CREATE TABLE `admins` (
 	`id` text PRIMARY KEY NOT NULL,
-	`name` text NOT NULL,
-	`slug` text NOT NULL,
-	`custom_domain` text,
-	`plan` text DEFAULT 'free' NOT NULL,
-	`max_buildings` integer DEFAULT 1 NOT NULL,
-	`max_rooms` integer DEFAULT 10 NOT NULL,
+	`user_id` text NOT NULL,
+	`host_id` text NOT NULL,
+	`role` text DEFAULT 'admin' NOT NULL,
+	`permissions` text DEFAULT '[]' NOT NULL,
+	`invite_email` text,
+	`invite_token` text,
+	`invite_accepted_at` integer,
 	`is_active` integer DEFAULT true NOT NULL,
 	`created_at` integer,
-	`updated_at` integer
+	`updated_at` integer,
+	FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON UPDATE no action ON DELETE cascade,
+	FOREIGN KEY (`host_id`) REFERENCES `hosts`(`id`) ON UPDATE no action ON DELETE cascade
 );
---> statement-breakpoint
-CREATE UNIQUE INDEX `tenants_slug_unique` ON `tenants` (`slug`);--> statement-breakpoint
-CREATE UNIQUE INDEX `tenants_custom_domain_unique` ON `tenants` (`custom_domain`);

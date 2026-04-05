@@ -42,7 +42,7 @@ export default function UserSignInPage() {
         const result = await signInAction(formData)
 
         if (result.success) {
-            toast.success(result.message)
+            toast.success(result.message, { duration: 1000 })
             router.push(callbackUrl || "/")
             await queryClient.invalidateQueries({ queryKey: ['account', 'me'] })
         } else {

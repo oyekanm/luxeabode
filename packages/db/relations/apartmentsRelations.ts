@@ -8,14 +8,19 @@ import {
   apartments,
   buildingImages,
   buildings,
+  hosts,
 } from "../schema";
 
-const buildingRelations = relations(buildings, ({ many }) => ({
+const buildingRelations = relations(buildings, ({ many, one }) => ({
   apartments: many(apartments),
   images: many(buildingImages),
   blockedDates: many(blockedDates),
   bookings: many(bookings),
   reviews: many(reviews),
+  host: one(hosts, {
+    fields: [buildings.hostId],
+    references: [hosts.id],
+  }),
 }));
 
 const buildingImagesRelations = relations(buildingImages, ({ one }) => ({
@@ -35,6 +40,10 @@ const apartmentsRelations = relations(apartments, ({ one, many }) => ({
   blockedDates: many(blockedDates),
   bookings: many(bookings),
   reviews: many(reviews),
+  host: one(hosts, {
+    fields: [apartments.hostId],
+    references: [hosts.id],
+  }),
 }));
 
 const apartmentImagesRelations = relations(apartmentImages, ({ one }) => ({

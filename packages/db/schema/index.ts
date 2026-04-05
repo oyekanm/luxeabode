@@ -1,5 +1,5 @@
 export * from "./users";
-export * from "./apartments";
+export * from "./buildings";
 export * from "./rooms";
 export * from "./availability";
 export * from "./bookings";
@@ -7,4 +7,5 @@ export * from "./payments";
 export * from "./reviews";
 export * from "./notifications";
 export * from "./audit";
-export * from "./tenants";
+export * from "./host";
+export * from "./admins";

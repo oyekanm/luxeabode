@@ -3,14 +3,23 @@ import { bookings } from "../schema/bookings";
 import { notifications } from "../schema/notifications";
 import { reviews } from "../schema/reviews";
 import { accounts, sessions, users } from "../schema/users";
-import { apartments, buildings } from "../schema";
+import { admins, apartments, buildings } from "../schema";
+import { hosts } from "../schema/host";
 
-const usersRelations = relations(users, ({ many }) => ({
+const usersRelations = relations(users, ({ many, one }) => ({
   sessions: many(sessions),
   accounts: many(accounts),
   bookings: many(bookings),
   reviews: many(reviews),
   notifications: many(notifications),
+  host: one(hosts, {
+    fields: [users.id],
+    references: [hosts.ownerId],
+  }),
+  admin: one(admins, {
+    fields: [users.id],
+    references: [admins.userId],
+  }),
 }));
 
 const sessionsRelations = relations(sessions, ({ one }) => ({

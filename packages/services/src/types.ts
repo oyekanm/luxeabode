@@ -50,3 +50,17 @@ export interface GetRoomsFilters {
   maxPrice?: string;
   isActive?: boolean;
 }
+export interface HostApplicationInput {
+  businessName: string;
+  phone: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  govtIdKey: string;
+  cacDocKey: string;
+  bankName: string;
+  bankAccount: string;
+  bankCode: string;
+  accountHolderName: string;
+}

@@ -1,5 +1,6 @@
 import { sqliteTable, text, integer } from "drizzle-orm/sqlite-core";
 import { createId } from "@paralleldrive/cuid2";
+import { admins } from "./admins";
 
 export const users = sqliteTable("users", {
   id: text("id")
@@ -14,6 +15,8 @@ export const users = sqliteTable("users", {
   isEmailVerified: integer("is_email_verified", { mode: "boolean" }).default(
     false,
   ),
+
+  // adminId: text("admin_id").references(() => admins.id),
 
   isActive: integer("is_active", { mode: "boolean" }).notNull().default(true),
   createdAt: integer("created_at", { mode: "timestamp" }).$defaultFn(

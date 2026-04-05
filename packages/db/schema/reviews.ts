@@ -3,7 +3,7 @@ import { createId } from "@paralleldrive/cuid2";
 import { users } from "./users";
 import { bookings } from "./bookings";
 import { apartments } from "./rooms";
-import { buildings } from "./apartments";
+import { buildings } from "./buildings";
 
 export const reviews = sqliteTable("reviews", {
   id: text("id")

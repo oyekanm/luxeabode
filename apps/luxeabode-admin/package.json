@@ -28,6 +28,7 @@
     "@repo/helpers": "workspace:*",
     "@repo/services": "workspace:*",
     "@repo/ui": "workspace:*",
+    "@repo/auth": "workspace:*",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/match-sorter-utils": "^8.19.4",
     "@tanstack/react-devtools": "^0.7.0",
