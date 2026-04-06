@@ -9,6 +9,7 @@ import FunctionalButton from "@repo/ui/functionalButton"
 import LogoutBtn from "../reuseable/logoutBtn"
 import { useCurrentUser } from "@/hooks/use-current-user"
 import { useRouter } from "next/navigation"
+import { ActiveUserDropDown } from "./activeUserDropDown"
 
 export function Navigation() {
     const { session } = useCurrentUser()
@@ -60,10 +61,9 @@ export function Navigation() {
                         {session ?
                             (
                                 <div className="hidden md:flex items-center gap-3">
-                                    <LogoutBtn />
-                                    <span className="pl-4 cursor-pointer">
-                                        <UserCircle className="size-12!" />
-                                    </span>
+
+
+                                    <ActiveUserDropDown />
                                 </div>
                             )
                             :

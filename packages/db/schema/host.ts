@@ -23,6 +23,7 @@ export const hosts = sqliteTable("hosts", {
   // })
   //   .notNull()
   //   .default("individual"),
+  slug: text("slug").notNull().unique(),
 
   // contact and legal
   phone: text("phone").notNull(),

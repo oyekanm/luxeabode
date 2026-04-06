@@ -50,11 +50,13 @@ export const bookings = sqliteTable("bookings", {
   taxAmount: real("tax_amount").notNull().default(0),
   totalAmount: real("total_amount").notNull(),
   currency: text("currency").notNull().default("NGN"),
+
   // guest details (stored separately in case booking is for someone else)
   guestName: text("guest_name").notNull(),
   guestEmail: text("guest_email").notNull(),
   guestPhone: text("guest_phone"),
   specialRequests: text("special_requests"),
+
   // internal notes from admin
   adminNotes: text("admin_notes"),
   cancelledAt: integer("cancelled_at", { mode: "timestamp" }),

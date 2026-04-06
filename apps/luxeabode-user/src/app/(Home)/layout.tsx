@@ -16,14 +16,10 @@ export default async function RootLayout({
     })
 
     return (
-        <html lang="en">
-            <body>
-                <HydrationBoundary state={dehydrate(queryClient)}>
-                    <Navigation />
-                    {children}
-                    <Footer />
-                </HydrationBoundary>
-            </body>
-        </html>
+        <HydrationBoundary state={dehydrate(queryClient)}>
+            <Navigation />
+            {children}
+            <Footer />
+        </HydrationBoundary>
     );
 }

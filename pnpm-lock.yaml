@@ -362,10 +362,19 @@ importers:
       '@repo/db':
         specifier: workspace:*
         version: link:../db
+      '@repo/shared':
+        specifier: workspace:*
+        version: link:../shared
     devDependencies:
       '@cloudflare/workers-types':
         specifier: ^4.20260302.0
         version: 4.20260302.0
+
+  packages/shared:
+    dependencies:
+      '@repo/helpers':
+        specifier: workspace:*
+        version: link:../helpers
 
   packages/typescript-config: {}
 

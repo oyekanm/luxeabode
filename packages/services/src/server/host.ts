@@ -1,5 +1,6 @@
 // packages/services/src/hosts.ts
 import { eq } from "@repo/db";
+import { slugify } from "@repo/shared";
 import { hosts, admins, users } from "@repo/db/schema";
 import { ConflictError, NotFoundError, ForbiddenError } from "../errors";
 import type { Db } from "@repo/db";
@@ -31,10 +32,11 @@ export class HostsService {
       throw new ConflictError("You already have a host application");
 
     // TODO: make host status approved and remove when theres a mechanism to verify and also remove the admin creation query
+    const slug = slugify(input.businessName);
 
     const [host] = await db
       .insert(hosts)
-      .values({ ...input, ownerId: userId, status: "approved" })
+      .values({ ...input, ownerId: userId, status: "approved", slug })
       .returning();
 
     // create admin
